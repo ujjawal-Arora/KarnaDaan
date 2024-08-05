@@ -11,7 +11,7 @@ function App() {
    
      <Route exact path="/"  element={<Appbar/>} />
      <Route exact path="/donate"  element={<Donates/>} />
-  gh
+  
     </Routes>
    </BrowserRouter>
   
