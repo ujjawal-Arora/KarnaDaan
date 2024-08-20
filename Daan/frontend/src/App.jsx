@@ -2,6 +2,10 @@ import { useState } from 'react'
 import Appbar from './Components/Appbar'
 import {BrowserRouter, Routes,Route} from 'react-router-dom'
 import Donates from './Pages/Donates'
+import Login from './Components/Login/Login'
+import SignUp from './Components/Register/SignUp'
+import Home from './Pages/Home'
+import MainCard from './Components/MainCard'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -9,9 +13,12 @@ function App() {
    <BrowserRouter>
     <Routes>
    
-     <Route exact path="/"  element={<Appbar/>} />
+     <Route exact path="/"  element={<Home/>} />
      <Route exact path="/donate"  element={<Donates/>} />
-  
+     <Route exact path="/login"  element={<Login/>} />
+     <Route exact path="/signup"  element={<SignUp/>} />
+     <Route exact path="/main" element={<MainCard/>} />
+
     </Routes>
    </BrowserRouter>
   
