@@ -58,6 +58,19 @@ if(!success) return res.status(400).json({error:"zod error"});
    const token=jwt.sign({
     userId
    },JWT_SECRET);
+   res.cookie("token",token);
+
+   res.cookie("token", token, 
+      { 
+      httpOnly: true,
+      expires: new Date(Date.now() + 7200000),
+      }
+   );
+
+
+//   res.setHeader('Authorization',`Bearer ${token}`);
+res.setHeader('Authorization', token);
+
    return res.status(200).json({
     userId,
     token:token,

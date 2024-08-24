@@ -18,6 +18,14 @@ const requestSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  accepted:{
+    type: Boolean,
+    default:false,
+  },
+  wishListed:{
+    type: Boolean,
+    default:false,
+  },
   phoneNumber: {
     type: String,
     required: true,
@@ -28,7 +36,14 @@ const requestSchema = new mongoose.Schema({
       message: props => `${props.value} is not a valid phone number!`,
     },
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+},
+
 }, {
   timestamps: true, 
 });
-export default requestSchema;
+const Request=mongoose.model('Request',requestSchema);
+export  {requestSchema,Request};

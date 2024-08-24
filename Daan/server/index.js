@@ -2,8 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import mainRouter from './routes/index.js'
 import connect from './Database.js';  
-const app=express();
+import cookieParser from 'cookie-parser';
 
+
+
+const app=express();
+app.use(cookieParser());
 app.use(cors());
 
 

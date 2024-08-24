@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import postSchema from './postModel.js';
-import reqSchema from './reqModel.js'
+// import {postSchema} from './postModel.js';
+// import {requestSchema} from './reqModel.js'
 
 const UserSchema= new mongoose.Schema({
     userName:{
@@ -21,14 +21,18 @@ const UserSchema= new mongoose.Schema({
         required:true,
         minlength:8,
     },
-    post: {
-        type: [postSchema], 
-        default: [],
-    },
-    req: {
-        type: [reqSchema], 
-        default: [],
-    },
+    posts:[
+        {
+            type:mongoose.Types.ObjectId,
+            ref:'Post'
+        }
+       ],
+       requests:[
+        {
+            type:mongoose.Types.ObjectId,
+            ref:'Request'
+        }
+       ],
 
 });
 const User=mongoose.model('User',UserSchema);

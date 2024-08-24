@@ -1,10 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import img1 from '../assets/img1.jpg';
 import img2 from '../assets/img2.jpg';
 import img3 from '../assets/img3.jpg';
 import FrontCard from '../Components/FrontCard';
 
 const FrontCards = () => {
+  const [data,setData] =useState(' ');
+  // useEffect(()=>{
+  //   const getData= async ()=>{
+  //     try{
+  //       // const response = await fetch('http://localhost:3000/api/v1/post/get');
+  //       const data = await response.json();
+  //       setData(data);
+
+  //     }catch(e){
+  //       console.error('Failed to fetch data', e);
+  //     }
+  //   }
+  // })
   return (
     <div className="h-screen w-full grid grid-cols-4   justify-center items-center gap-4 bg-gray-100 p-4">
       <FrontCard

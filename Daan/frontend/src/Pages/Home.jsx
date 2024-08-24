@@ -5,7 +5,6 @@ function Home() {
   return (
     <div>
         <div>
-          Hello world
             <Appbar/>
         </div>
         <div>

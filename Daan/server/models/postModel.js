@@ -17,10 +17,19 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  wishListed:{
+    type:Boolean,
+    default:false
+},
+donated:{
+  type:Boolean,
+  default:false
+},
   name: {
     type: String,
     required: true,
   },
+
   phoneNumber: {
     type: String,
     required: true,
@@ -31,8 +40,14 @@ const postSchema = new mongoose.Schema({
       message: props => `${props.value} is not a valid phone number!`,
     },
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+},
 }, {
   timestamps: true,
 });
 
-export default postSchema;
+const Post = mongoose.model('Post', postSchema);
+export  {Post,postSchema};
