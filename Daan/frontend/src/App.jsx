@@ -8,6 +8,7 @@ import SignIn from './Components/Register/SignIn'
 
 import Home from './Pages/Home'
 import MainCard from './Components/MainCard'
+import Forgot from './Components/Register/Forgot'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -20,6 +21,8 @@ function App() {
      <Route exact path="/login"  element={<Login/>} />
      <Route exact path="/signup"  element={<SignUp/>} />
      <Route exact path="/signin"  element={<SignIn/>} />
+     <Route exact path="/forgot"  element={<Forgot/>} />
+
 
      <Route exact path="/main" element={<MainCard/>} />
 

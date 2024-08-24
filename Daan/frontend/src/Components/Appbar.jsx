@@ -17,15 +17,17 @@ function Appbar() {
         <SearchBox />
       </div>
 
-     <div className="flex justify-around w-60">
+     <div className="flex gap-4 justify-around w-60">
      <div>
         <Notifications />
       </div>
     
       <div>
-        <span class="inline-flex items-center justify-center size-10 rounded-full bg-amber-950 text-lg font-semibold text-white leading-none">
-          U
-        </span>
+        <button  onClick={()=>{
+            navigate('/signup')
+        }} class="bg-amber-900 h-11 w-24 p-2 rounded-lg text-white text-xl font-bold">
+          Login
+        </button>
       </div>
       <div>
         <button onClick={()=>{
