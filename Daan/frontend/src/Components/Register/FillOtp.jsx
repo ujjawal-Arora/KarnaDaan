@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 function FillOtp() {
     const [otp, setOtp] = useState("");
-    const [timeLeft, setTimeLeft] = useState(240); // 5 minutes in seconds
+    const [timeLeft, setTimeLeft] = useState(240); // 2 minutes in seconds
         const navigate=useNavigate();
     const handleChangeOtp = (newOtp) => {
       setOtp(newOtp);
