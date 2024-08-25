@@ -58,7 +58,7 @@ function FillOtp() {
                 कर्ण-Daan Login
               </h1>
               <p className='font-medium text-lg text-gray-500 mt-4'>
-                Please enter your OTP :-
+                Please enter your OTP from Your  email :-
               </p>
               <div className='mt-8'>
                 <OtpCard length={6} onChangeOtp={handleChangeOtp} />
