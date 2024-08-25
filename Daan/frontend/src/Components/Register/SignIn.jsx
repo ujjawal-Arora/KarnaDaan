@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { FaArrowLeft } from "react-icons/fa6";
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 function SignIn() {
+  const navigate = useNavigate();
   // Hooks to store email and password
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,7 +16,10 @@ function SignIn() {
         { userName: email, password: password }, 
         { withCredentials: true } // Ensure cookies are sent
       );
-      console.log(response.data.token);
+      console.log(response.status);
+       if(response.status==200){
+        navigate('/enter-otp');
+      }
     } catch (error) {
       console.error('Error during sign-in:', error);
     }

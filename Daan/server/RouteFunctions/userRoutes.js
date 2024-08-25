@@ -1,80 +1,71 @@
-const {JWT_SECRET}=process.env;
-import jwt from 'jsonwebtoken';
-import { SignUpSchema,SigninSchema } from '../Zod/zod.js';
-import User from '../models/userModel.js'
+import { SignUpSchema, SigninSchema } from "../Zod/zod.js";
+import User from "../models/userModel.js";
+import storeotp from "../Session/storeOtp.js";
+import sendMail from "../Controller/sendOtpMail.js";
 
+const SignUp = async (req, res) => {
+  const body = req.body;
+  console.log(body);
+  const { success } = SignUpSchema.safeParse(body);
+  console.log(success);
 
-const SignUp = async (req,res)=>{
-    const body=req.body;
-    console.log(body);
-const {success}=SignUpSchema.safeParse(body);
-console.log(success);
+  if (!success) return res.status(400).json({ error: "zod error" });
+  const { userName, firstName, lastName, password } = req.body;
 
-if(!success) return res.status(400).json({error:"zod error"});
-   const {userName,firstName,lastName,password}=req.body;
- 
-   const useAlreadyExsists=await User.findOne({
-    userName:userName,
-   })
-   if(useAlreadyExsists){
-    return res.status(400).json({error:"User name already exists"})
-   }
-   const user=await  User.create({
+  const useAlreadyExsists = await User.findOne({
+    userName: userName,
+  });
+  if (useAlreadyExsists) {
+    return res.status(400).json({ error: "User name already exists" });
+  }
+  const user = await User.create({
     userName,
     firstName,
     lastName,
     password,
-   })
- 
-   return res.status(200).json({
-    message:"user created",
-   });
+  });
 
- }
+  return res.status(200).json({
+    message: "user created",
+  });
+};
 
- const SignIn =async  (req,res)=>{
-    const body=req.body;
-const {success}=SigninSchema.safeParse(body);
-console.log(success);
+const SignIn = async (req, res) => {
+  const body = req.body;
+  const { success } = SigninSchema.safeParse(body);
+  console.log(success);
 
-if(!success) return res.status(400).json({error:"zod error"});
-   const {userName,password}=req.body;
- 
-   
-   const useAlreadyExsists=await User.findOne({
-    userName:userName,
-   })
-   if(!useAlreadyExsists){
-    return res.status(400).json({error:"User doesnot exists"})
-   }
+  if (!success) return res.status(400).json({ error: "zod error" });
+  const { userName, password } = req.body;
 
-   if(useAlreadyExsists.password!=password){
-    return res.status(400).json({error:"Password is incorrect"})
-   }
-   const userId=useAlreadyExsists._id;
-   const token=jwt.sign({
-    userId
-   },JWT_SECRET);
-   res.cookie("token",token);
+  const useAlreadyExsists = await User.findOne({
+    userName: userName,
+  });
+  if (!useAlreadyExsists) {
+    return res.status(400).json({ error: "User doesnot exists" });
+  }
 
-   res.cookie("token", token, 
-      { 
-      httpOnly: true,
-      sameSite: 'None',
-      expires: new Date(Date.now() + 7200000),
-      secure: true, // Set to true if using HTTPS
+  if (useAlreadyExsists.password != password) {
+    return res.status(400).json({ error: "Password is incorrect" });
+  }
 
-      }
-   );
+  const userId = useAlreadyExsists._id;
 
+  // await generateOtp();
+  const otp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+  // const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
-//   res.setHeader('Authorization',`Bearer ${token}`);
-res.setHeader('Authorization', token);
+  // const otpEntry = new OTP({
+  //     otp,
+  //     userId: userId,
+  //     expiresAt,
+  //   });
+  //   await otpEntry.save();
+  console.log("otp at this point",otp);
+  req.session.userId = userId;
+  storeotp({ req: req, otp: otp });
 
-   return res.status(200).json({
-    userId,
-    token:token,
-   })
-
- }
- export {SignUp,SignIn};
+  await sendMail({ userName: userName, otp: otp });
+  res.status(200).json({ message: "OTP sent to your email." });
+};
+export { SignUp, SignIn };
