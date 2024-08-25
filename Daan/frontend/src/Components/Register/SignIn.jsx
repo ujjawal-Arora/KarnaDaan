@@ -1,21 +1,39 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 import { FaArrowLeft } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
 
 function SignIn() {
+  // Hooks to store email and password
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSignIn = async () => {
+    // Handle sign-in logic here
+    try {
+      const response = await axios.post('http://localhost:3000/api/v1/user/signin', 
+        { userName: email, password: password }, 
+        { withCredentials: true } // Ensure cookies are sent
+      );
+      console.log(response.data.token);
+    } catch (error) {
+      console.error('Error during sign-in:', error);
+    }
+  };
+
   return (
-    <div className=' flex bg-slate-50 h-screen  flex-col'>
+    <div className='flex bg-slate-50 h-screen flex-col'>
       
       {/* Top Section with Back Arrow */}
-      <div className='p-4 '>
+      <div className='p-4'>
         <Link to="/">
           <FaArrowLeft className='text-2xl text-gray-600' />
         </Link>
       </div>
       
-      <div className='flex  justify-center gap-28 mb-10  flex-grow'>
-        <div className=' flex items-center justify-center '>
-          <div className='bg-white  shadow-xl px-8 py-10 rounded-3xl border-2 border-gray-200 w-[60vh]'>
+      <div className='flex justify-center gap-28 mb-10 flex-grow'>
+        <div className='flex items-center justify-center'>
+          <div className='bg-white shadow-xl px-8 py-10 rounded-3xl border-2 border-gray-200 w-[60vh]'>
             <h1 className='text-5xl font-semibold text-center'>
               कर्ण-Daan Login
             </h1>
@@ -28,6 +46,8 @@ function SignIn() {
                 <input
                   className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
                   placeholder='Enter your Email'
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className='mt-4'>
@@ -36,6 +56,8 @@ function SignIn() {
                   className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
                   placeholder='Enter your Password'
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               <div className='mt-8 flex justify-between items-center'>
@@ -50,11 +72,15 @@ function SignIn() {
                 </button>
               </div>
               <div className='mt-8 flex flex-col gap-y-4'>
-                <button className='py-3 rounded-xl bg-orange-400 text-white text-lg font-bold'>
+                <button
+                  className='py-3 rounded-xl bg-orange-400 text-white text-lg font-bold'
+                  onClick={handleSignIn}
+                >
                   Sign in
                 </button>
-                <button 
-                  className='flex rounded-xl py-3 border-2 border-gray-100 items-center justify-center gap-2'>
+                <button
+                  className='flex rounded-xl py-3 border-2 border-gray-100 items-center justify-center gap-2'
+                >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5.26644 9.76453C6.19903 6.93863 8.85469 4.90909 12.0002 4.90909C13.6912 4.90909 15.2184 5.50909 16.4184 6.49091L19.9093 3C17.7821 1.14545 15.0548 0 12.0002 0C7.27031 0 3.19799 2.6983 1.24023 6.65002L5.26644 9.76453Z" fill="#EA4335"/>
                     <path d="M16.0406 18.0142C14.9508 18.718 13.5659 19.0926 11.9998 19.0926C8.86633 19.0926 6.21896 17.0785 5.27682 14.2695L1.2373 17.3366C3.19263 21.2953 7.26484 24.0017 11.9998 24.0017C14.9327 24.0017 17.7352 22.959 19.834 21.0012L16.0406 18.0142Z" fill="#34A853"/>
@@ -74,7 +100,7 @@ function SignIn() {
           </div>
         </div>
         
-        <div className="hidden lg:flex h-[87vh] w-[30%]   items-center justify-center  relative">
+        <div className="hidden lg:flex h-[87vh] w-[30%] items-center justify-center relative">
           <div className="w-64 h-64 bg-gradient-to-tr from-orange-500 to-gray-200 rounded-full animate-spin" />
           <div className="w-full h-1/2 absolute bg-white/10 backdrop-blur-lg" />
         </div>
