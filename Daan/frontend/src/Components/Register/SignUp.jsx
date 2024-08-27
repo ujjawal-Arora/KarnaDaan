@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 function SignUp() {
     const navigate=useNavigate();
   // State for form inputs
+  // hello world
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
