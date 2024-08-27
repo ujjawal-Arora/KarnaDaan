@@ -10,6 +10,8 @@ import Home from './Pages/Home'
 import MainCard from './Components/MainCard'
 import Forgot from './Components/Register/Forgot'
 import FillOtp from './Components/Register/FillOtp'
+import FillOtpForget from './Components/Register/FillOtpForgot'
+import UpdatePassword from './Components/Register/UpdatePassword'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -25,7 +27,9 @@ function App() {
      <Route exact path="/forgot"  element={<Forgot/>} />
      <Route exact path="/enter-otp"  element={<FillOtp/>} />
 
+     <Route exact path="/enter-forget-otp"  element={<FillOtpForget/>} />
 
+     <Route exact path="/update-password"  element={<UpdatePassword/>} />
 
      <Route exact path="/main" element={<MainCard/>} />
 

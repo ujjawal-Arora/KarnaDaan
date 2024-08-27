@@ -1,10 +1,10 @@
 import { transporter } from "./MailTranspoter.js";
 
 
-async function main() {
+async function sendWelcomeMail({email}) {
   const info = await transporter.sendMail({
     from: '"कर्ण Daan" <ujjawal.arora2004@gmail.com>', // Sender address
-    to: "ujjawal.arora4812@gmail.com", // Recipient address
+    to: email, // Recipient address
     subject: "Sucessfully Logined to  कर्ण Daan", // Subject line
     text: "WELCOME TO  कर्ण Daan?",
     html: `<html>
@@ -141,6 +141,5 @@ Explore our features, and get started with donating, requesting resources, or fu
 
   console.log("Message sent: %s", info.messageId);
 }
-export {main};
+export {sendWelcomeMail};
 
-main();

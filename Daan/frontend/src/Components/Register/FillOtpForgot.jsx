@@ -4,7 +4,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-function FillOtp({istrue}) {
+function FillOtpForget() {
     const [otp, setOtp] = useState("");
     const [timeLeft, setTimeLeft] = useState(240); // 2 minutes in seconds
     const[resend,setResend]=useState(false);
@@ -12,37 +12,20 @@ function FillOtp({istrue}) {
     const handleChangeOtp = (newOtp) => {
       setOtp(newOtp);
     };
-    const[forgot,setForgot] = useState(false);
-    if(istrue){
-      setForgot(true);
-    }
     const handleSubmit =  async() => {
         console.log("OTP submitted:", otp);
         try{
-              const response =await axios.post('http://localhost:3000/api/v1/otp/verify-token-otp',{otp:otp},{ withCredentials: true });
+              const response =await axios.post('http://localhost:3000/api/v1/otp/verify-otp',{otp:otp},{ withCredentials: true });
               console.log(response);
-              if(response.data.token){
-                navigate('/');
+              if(response.status==200){
+                navigate('/update-password');
               }
+              
         }catch(err){
             console.error("Error submitting OTP:", err);
 
         }
     };
-
-    const handleforgot =  async() => {
-      console.log("OTP submitted:", otp);
-      try{
-            const response =await axios.post('http://localhost:3000/api/v1/otp/verify-token-otp',{otp:otp},{ withCredentials: true });
-            console.log(response);
-            if(response.data.token){
-              navigate('/');
-            }
-      }catch(err){
-          console.error("Error submitting OTP:", err);
-
-      }
-  };
 
     useEffect(() => {
         if (timeLeft > 0) {
@@ -56,7 +39,7 @@ function FillOtp({istrue}) {
 
     const resendOtp = async () => {
       try {
-          const response = await axios.post('http://localhost:3000/api/v1/otp/resend-otp', {}, { withCredentials: true });
+          const response = await axios.post('http://localhost:3000/api/v1/otp/resend-otp',{}, { withCredentials: true });
           console.log("Resent OTP:", response.data.otp);
           setTimeLeft(300); // Reset the timer to 5 minutes
           setResend(true); 
@@ -94,12 +77,11 @@ function FillOtp({istrue}) {
                 <div className='mt-8 flex flex-col gap-y-4'>
                   <button
                     className='py-3 rounded-xl bg-orange-400 text-white text-lg font-bold'
-                    onClick={forgot?handleSubmit:handleforgot}
+                    onClick={handleSubmit}
                   >
                     Submit
                   </button>
                 </div>
-
 
                 <div className='mt-8 flex justify-end items-center'>
                   
@@ -136,4 +118,4 @@ function FillOtp({istrue}) {
     );
 }
 
-export default FillOtp;
+export default FillOtpForget;

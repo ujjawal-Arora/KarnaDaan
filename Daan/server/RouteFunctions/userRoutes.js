@@ -63,9 +63,33 @@ const SignIn = async (req, res) => {
   //   await otpEntry.save();
   console.log("otp at this point",otp);
   req.session.userId = userId;
+  req.session.userName = userName;
   storeotp({ req: req, otp: otp });
 
   await sendMail({ userName: userName, otp: otp });
   res.status(200).json({ message: "OTP sent to your email." });
 };
-export { SignUp, SignIn };
+const UpdatePassword = async (req, res) => {
+  const userId = req.session.userId;
+  console.log(userId);
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({ error: "Password is required" });
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(userId, { password }, { new: true });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error("Error updating password:", error);
+    return res.status(500).json({ error: "An error occurred while updating the password" });
+  }
+};
+
+export { SignUp, SignIn,UpdatePassword };

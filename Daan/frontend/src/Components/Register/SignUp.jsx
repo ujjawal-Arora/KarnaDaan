@@ -2,11 +2,11 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa6";
+import { useNavigate } from 'react-router-dom';
 
-import { FaFacebook, FaGithub, FaGoogle } from 'react-icons/fa';
-import { account } from '../../AppWrite/appWrite';
-import { OAuthProvider } from 'appwrite';
+
 function SignUp() {
+    const navigate=useNavigate();
   // State for form inputs
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -25,6 +25,9 @@ function SignUp() {
             password: password,
         });
         console.log(response);
+        if(response.status==200){
+            navigate('/signin')
+        }
     
       // You can add a function to handle sign-up logic here, such as making an API call
   };
