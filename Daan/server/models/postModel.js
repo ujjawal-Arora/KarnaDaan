@@ -9,7 +9,11 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  imgUrls: {
+  category:{
+    type: String,
+    required: true,
+  },
+  imageUrls: {
     type: [String],
     required: true,
   },

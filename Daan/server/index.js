@@ -3,14 +3,11 @@ import cors from 'cors';
 import mainRouter from './routes/index.js'
 import connect from './Database.js';  
 import cookieParser from 'cookie-parser';
-
-
-
 const app=express();
 app.use(cookieParser());
 app.use(cors({  
     credentials: true,
-    origin: 'http://localhost:5173',
+     origin: 'http://localhost:5173'
 }));
 
 

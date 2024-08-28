@@ -3,7 +3,7 @@ import '../config.js'
 const {JWT_SECRET}=process.env;
 
 const authenticate = (req, res, next) => {
-   
+   console.log("Here")
         const cookieToken = req.cookies.token;
         let token=null;
         if (!cookieToken) {
@@ -11,7 +11,7 @@ const authenticate = (req, res, next) => {
         } else {
             token = cookieToken;
         }
-    
+    // console.log(token)
 
 
     try {

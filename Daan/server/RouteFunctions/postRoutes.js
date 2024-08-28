@@ -2,9 +2,14 @@ import User from "../models/userModel.js";
 import {Post} from '../models/postModel.js';
 
 const addPost = async(req,res)=>{
-const {title,description,imageUrls,location,name,phoneNumber,wishListed,donated}=req.body;
+const {title,description,imageUrls,location,name,phoneNumber,wishListed,donated,category}=req.body;
+console.log("images url",imageUrls);
+console.log("images url only")
+imageUrls.map((i)=>{
+    console.log(typeof i)
+})
 
-if(!title||!description||!imageUrls||!location||!name||!phoneNumber||!wishListed||!donated){
+if(!title||!description||!location||!name||!phoneNumber||!category){
     return res.status(400).json({error:"please fill all the fields"});
 }
 
@@ -18,6 +23,7 @@ if (!user) {
 const newPost = new Post({
     title,
     description,
+    category,
     imageUrls,
     location,
     name,
@@ -30,6 +36,7 @@ const newPost = new Post({
 });
 
 try {
+    console.log(newPost.toJSON());
     const savedPost = await newPost.save();
 
     user.posts.push(savedPost._id);
