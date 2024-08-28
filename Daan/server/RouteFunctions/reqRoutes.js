@@ -2,13 +2,14 @@ import User from "../models/userModel.js";
 import {Request} from '../models/reqModel.js';
 
 const addReq = async(req,res)=>{
-const {title,description,location,name,phoneNumber,wishListed,accepted}=req.body;
+const {title,description,location,name,phoneNumber,wishListed,accepted,category}=req.body;
 
-if(!title||!description||!location||!name||!phoneNumber||!wishListed||!accepted){
+if(!title||!description||!location||!name||!phoneNumber){
     return res.status(400).json({error:"please fill all the fields"});
 }
 
 const userId=req.user.userId;
+console.log(userId);
 
 const user = await User.findById(userId);
 
@@ -20,6 +21,7 @@ const newRequest = new Request({
     description,
     location,
     name,
+    category,
     phoneNumber,
     wishListed,
     accepted,
@@ -34,6 +36,7 @@ try {
     await user.save();
 
 } catch (error) {
+    console.log(error)
     return res.status(404).json({error:"error saving user"});
 }
 return res.status(200).json({message:"Req added successfully"})

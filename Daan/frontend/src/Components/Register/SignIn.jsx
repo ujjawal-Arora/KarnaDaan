@@ -2,7 +2,8 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { FaArrowLeft } from "react-icons/fa6";
 import { Link,useNavigate } from 'react-router-dom';
-
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 function SignIn() {
   const navigate = useNavigate();
   // Hooks to store email and password
@@ -22,6 +23,29 @@ function SignIn() {
       }
     } catch (error) {
       console.error('Error during sign-in:', error);
+    }
+  };
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const credentialDecoded = jwtDecode(credentialResponse.credential);
+      console.log(credentialDecoded);
+
+      // Make an axios call to your backend with the Google token or decoded information
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/user/google-signin",
+        {
+          email: credentialDecoded.email,
+          firstName: credentialDecoded.given_name,
+          lastName: credentialDecoded.family_name,
+        }
+      );
+
+      console.log("Backend Response:", response);
+      if (response.status === 200) {
+        navigate("/"); // Redirect to your dashboard or desired route
+      }
+    } catch (error) {
+      console.error("Error during Google Sign-In:", error);
     }
   };
 
@@ -82,7 +106,7 @@ function SignIn() {
                 >
                   Sign in
                 </button>
-                <button
+                {/* <button
                   className='flex rounded-xl py-3 border-2 border-gray-100 items-center justify-center gap-2'
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -92,8 +116,18 @@ function SignIn() {
                     <path d="M5.27698 14.2663C5.03833 13.5547 4.90909 12.7922 4.90909 11.9984C4.90909 11.2167 5.03444 10.4652 5.2662 9.76294L1.23999 6.64844C0.436587 8.25884 0 10.0738 0 11.9984C0 13.918 0.444781 15.7286 1.23746 17.3334L5.27698 14.2663Z" fill="#FBBC05"/>
                   </svg>
                   Sign in with Google
-                </button>
+                </button> */}
               </div>
+              <div className="flex justify-center mt-5">
+                  <div style={{ transform: "scale(1.5)", padding: "10px" }}>
+                    <GoogleLogin
+                      onSuccess={handleGoogleSuccess}
+                      onError={() => {
+                        console.log("Login Failed");
+                      }}
+                    />
+                  </div>
+                </div>
               <div className='mt-8 flex justify-center items-center'>
                 <p className='font-medium text-base'>Don't have an account?</p>
                 <button className='text-orange-400 text-base font-medium ml-2'>

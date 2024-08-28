@@ -1,7 +1,11 @@
 import { SignUpSchema, SigninSchema } from "../Zod/zod.js";
 import User from "../models/userModel.js";
 import storeotp from "../Session/storeOtp.js";
-import sendMail from "../Controller/sendOtpMail.js";
+import sendMail from '../Controller/sendOtpMail.js';
+import jwt from 'jsonwebtoken';
+
+import { sendWelcomeMail } from '../Controller/sendWelcomeMail.js';
+const {JWT_SECRET}=process.env;
 
 const SignUp = async (req, res) => {
   const body = req.body;
@@ -91,5 +95,59 @@ const UpdatePassword = async (req, res) => {
     return res.status(500).json({ error: "An error occurred while updating the password" });
   }
 };
+ const GoogleSignIn =async (req, res) => {
+  const {email, firstName,lastName} = req.body;
+  try{
+    if(!email||!firstName||!lastName){
+      return res.status(400).json({ error: "please send all the details" });
+    }
+    const password = "Sigined in through google"
+    const useAlreadyExsists = await User.findOne({
+      userName: email,
+    });
+    let userId=null;
+    if (!useAlreadyExsists) {
+      const user = await User.create({
+        userName:email,
+        firstName,
+        lastName,
+        password,
+      });    
+      const findUser = await User.findOne({
+        userName: email,
+      });  
+      userId=findUser._id;
+      }
+      else{
+      userId=useAlreadyExsists._id;
+    }
 
-export { SignUp, SignIn,UpdatePassword };
+    const token=jwt.sign({
+      userId
+     },JWT_SECRET);
+   
+   
+      res.cookie("token", token, 
+         { 
+         httpOnly: true,
+         sameSite: 'None',
+         expires: new Date(Date.now() + 7200000),
+         secure: true, // Set to true if using HTTPS
+   
+         }
+      );
+   
+   
+     res.setHeader('Authorization',`Bearer ${token}`);
+  sendWelcomeMail({email:email});
+    return res.status(200).json({
+      message: "user created",
+    });
+          
+  }catch(error){
+    console.log("An error occurred while signing ",error);
+    return res.status(500).json({ error: "An error occurred while signing in through Google" });
+  }
+ }
+
+export { SignUp, SignIn,UpdatePassword,GoogleSignIn };

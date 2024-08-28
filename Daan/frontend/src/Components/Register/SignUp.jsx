@@ -1,159 +1,154 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import axios from "axios";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa6";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 function SignUp() {
-    const navigate=useNavigate();
+  const navigate = useNavigate();
   // State for form inputs
   // hello world
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
   // Handle the form submission
-  const handleSubmit =async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-        const response = await axios.post('http://localhost:3000/api/v1/user/signup',{
-            firstName: firstName,
-            lastName: lastName,
-            userName: email,
-            password: password,
-        });
-        console.log(response);
-        if(response.status==200){
-            navigate('/signin')
-        }
-    
-      // You can add a function to handle sign-up logic here, such as making an API call
+
+    const response = await axios.post(
+      "http://localhost:3000/api/v1/user/signup",
+      {
+        firstName: firstName,
+        lastName: lastName,
+        userName: email,
+        password: password,
+      }
+    );
+    console.log(response);
+    if (response.status == 200) {
+      navigate("/signin");
+    }
   };
-  
 
-  // Handle form submission
-  // const handleSubmit = async (e) => {
-    // const response=await axios.post('http://localhost:3000/api/v1/user/signup',{
-    //             userName:email,
-    //             firstName:name,
-    //             lastName:lname,
-    //             email,
-    //             password,
-    //             confirmPassword
-        
-    // });
-    // console.log(response);
-  //   account.createOAuth2Session(
-  //       OAuthProvider.Google,
-  //       'http://localhost:5173/',
-  //       'http://localhost:5173/fail',
-        
-  //   )
-  //   const acc = new account(client);
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const credentialDecoded = jwtDecode(credentialResponse.credential);
+      console.log(credentialDecoded);
 
-  // };
-  // const handleGoogleSuccess = async (response) => {
-  //   try {
-  //     const googleUser = await account.createOAuth2Session(
-  //       'google',
-  //       'http://localhost:5173/',
-  //       'http://localhost:5173/fail'
-  //     );
-  //     console.log('Google login successful:', googleUser);
-  //   } catch (error) {
-  //     console.error('Error with Google login:', error);
-  //   }
-  // };
+      // Make an axios call to your backend with the Google token or decoded information
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/user/google-signin",
+        {
+          token: credentialResponse.credential, // You can send the token to your backend
+          googleId: credentialDecoded.sub,
+          email: credentialDecoded.email,
+          firstName: credentialDecoded.given_name,
+          lastName: credentialDecoded.family_name,
+        }
+      );
 
+      console.log("Backend Response:", response);
+      if (response.status === 200) {
+        navigate("/"); // Redirect to your dashboard or desired route
+      }
+    } catch (error) {
+      console.error("Error during Google Sign-In:", error);
+    }
+  };
 
   return (
-    <div className='flex bg-slate-50 h-screen flex-col'>
-    {/* Top Section with Back Arrow */}
-    <div className='p-4'>
+    <div className="flex bg-slate-50 h-screen flex-col">
+      {/* Top Section with Back Arrow */}
+      <div className="p-4">
         <Link to="/">
-            <FaArrowLeft className='text-2xl text-gray-600' />
+          <FaArrowLeft className="text-2xl text-gray-600" />
         </Link>
-    </div>
+      </div>
 
-    <div className='flex justify-center gap-28 mb-10 flex-grow'>
-        <div className='flex items-center justify-center'>
-            <form
-                className='bg-white shadow-xl px-8 py-9 rounded-3xl border-2 border-gray-200 w-[60vh]'
-                onSubmit={handleSubmit}
-            >
-                <h1 className='text-5xl font-semibold text-center'>
-                    कर्ण-Daan SignUp
-                </h1>
-                <p className='font-medium text-lg text-gray-500 mt-4'>
-                    Welcome!! Please enter your information
-                </p>
-                <div className='mt-7'>
-                    <div className='flex gap-4'>
-                        <div>
-                            <label className="text-lg font-medium">First Name</label>
-                            <input
-                                className='w-full border-2 border-gray-100 rounded-xl p-4 mt-0 bg-transparent'
-                                placeholder='First Name'
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label className="text-lg font-medium">Last Name</label>
-                            <input
-                                className='w-full border-2 border-gray-100 rounded-xl p-4 mt-0 bg-transparent'
-                                placeholder='Last Name'
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    <div className='mt-3'>
-                        <label className="text-lg font-medium">Email</label>
-                        <input
-                            className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
-                            placeholder='Enter your Email'
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div className='mt-3'>
-                        <label className="text-lg font-medium">Password</label>
-                        <input
-                            className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
-                            placeholder='Enter your Password'
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-                    <div className='mt-3 flex justify-between items-center'>
-                        <div>
-                            <input
-                                type="checkbox"
-                                id="remember"
-                                checked={rememberMe}
-                                onChange={(e) => setRememberMe(e.target.checked)}
-                            />
-                            <label className="ml-2 font-medium text-base" htmlFor="remember">
-                                Remember for 30 days
-                            </label>
-                        </div>
-                        <button className="font-medium text-base text-orange-400">
-                            <Link to='/forgot'>Forgot password</Link>
-                        </button>
-                    </div>
-                    <div className='mt-4 flex flex-col gap-y-4'>
-                        <button
-                            type="submit"
-                            className='py-3 rounded-xl bg-orange-400 text-white text-lg font-bold'
-                        >
-                            Sign up
-                        </button>
-                        <button
+      <div className="flex justify-center gap-28 mb-10 flex-grow">
+        <div className="flex items-center justify-center">
+          <form
+            className="bg-white shadow-xl px-8 py-9 rounded-3xl border-2 border-gray-200 w-[60vh]"
+            onSubmit={handleSubmit}
+          >
+            <h1 className="text-5xl font-semibold text-center">
+              कर्ण-Daan SignUp
+            </h1>
+            <p className="font-medium text-lg text-gray-500 mt-4">
+              Welcome!! Please enter your information
+            </p>
+            <div className="mt-7">
+              <div className="flex gap-4">
+                <div>
+                  <label className="text-lg font-medium">First Name</label>
+                  <input
+                    className="w-full border-2 border-gray-100 rounded-xl p-4 mt-0 bg-transparent"
+                    placeholder="First Name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="text-lg font-medium">Last Name</label>
+                  <input
+                    className="w-full border-2 border-gray-100 rounded-xl p-4 mt-0 bg-transparent"
+                    placeholder="Last Name"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="mt-3">
+                <label className="text-lg font-medium">Email</label>
+                <input
+                  className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
+                  placeholder="Enter your Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="mt-3">
+                <label className="text-lg font-medium">Password</label>
+                <input
+                  className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
+                  placeholder="Enter your Password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <div className="mt-3 flex justify-between items-center">
+                <div>
+                  <input
+                    type="checkbox"
+                    id="remember"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                  />
+                  <label
+                    className="ml-2 font-medium text-base"
+                    htmlFor="remember"
+                  >
+                    Remember for 30 days
+                  </label>
+                </div>
+                <button className="font-medium text-base text-orange-400">
+                  <Link to="/forgot">Forgot password</Link>
+                </button>
+              </div>
+              <div className="mt-4 flex flex-col gap-y-4">
+                <button
+                  type="submit"
+                  className="py-3 rounded-xl bg-orange-400 text-white text-lg font-bold"
+                >
+                  Sign up
+                </button>
+                {/* <button
                             className='flex rounded-xl py-3 border-2 border-gray-100 items-center justify-center gap-2'
                             onClick={() => console.log('Sign in with Google')}
                         >
@@ -164,24 +159,37 @@ function SignUp() {
                                 <path d="M5.27698 14.2663C5.03833 13.5547 4.90909 12.7922 4.90909 11.9984C4.90909 11.2167 5.03444 10.4652 5.2662 9.76294L1.23999 6.64844C0.436587 8.25884 0 10.0738 0 11.9984C0 13.918 0.444781 15.7286 1.23746 17.3334L5.27698 14.2663Z" fill="#FBBC05" />
                             </svg>
                             Sign in with Google
-                        </button>
-                    </div>
-                    <div className='mt-4 flex justify-center items-center'>
-                        <p className='font-medium text-base'>Already have an account?</p>
-                        <button className='text-orange-400 text-base font-medium ml-2'>
-                            <Link to="/signin">Sign in</Link>
-                        </button>
-                    </div>
+                        </button> */}
+
+                <div className="flex justify-center mt-5">
+                  <div style={{ transform: "scale(1.5)", padding: "10px" }}>
+                    <GoogleLogin
+                      onSuccess={handleGoogleSuccess}
+                      onError={() => {
+                        console.log("Login Failed");
+                      }}
+                    />
+                  </div>
                 </div>
-            </form>
+              </div>
+              <div className="mt-5 flex justify-center items-center">
+                <p className="font-medium text-base">
+                  Already have an account?
+                </p>
+                <button className="text-orange-400 text-base font-medium ml-2">
+                  <Link to="/signin">Sign in</Link>
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
 
         <div className="hidden lg:flex h-[87vh] w-[30%] items-center justify-center relative">
-            <div className="w-64 h-64 bg-gradient-to-tr from-orange-500 to-gray-200 rounded-full animate-spin" />
-            <div className="w-full h-1/2 absolute bg-white/10 backdrop-blur-lg" />
+          <div className="w-64 h-64 bg-gradient-to-tr from-orange-500 to-gray-200 rounded-full animate-spin" />
+          <div className="w-full h-1/2 absolute bg-white/10 backdrop-blur-lg" />
         </div>
+      </div>
     </div>
-</div>
   );
 }
 

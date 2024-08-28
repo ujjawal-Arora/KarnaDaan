@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Appbar from './Components/Appbar'
 import {BrowserRouter, Routes,Route} from 'react-router-dom'
 import Donates from './Pages/Donates'
 import Login from './Components/Login/Login'
@@ -12,8 +11,8 @@ import Forgot from './Components/Register/Forgot'
 import FillOtp from './Components/Register/FillOtp'
 import FillOtpForget from './Components/Register/FillOtpForgot'
 import UpdatePassword from './Components/Register/UpdatePassword'
+import Requests from './Pages/Requests'
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
    <BrowserRouter>
@@ -21,6 +20,8 @@ function App() {
    
      <Route exact path="/"  element={<Home/>} />
      <Route exact path="/donate"  element={<Donates/>} />
+     <Route exact path="/request"  element={<Requests/>} />
+
      <Route exact path="/login"  element={<Login/>} />
      <Route exact path="/signup"  element={<SignUp/>} />
      <Route exact path="/signin"  element={<SignIn/>} />
