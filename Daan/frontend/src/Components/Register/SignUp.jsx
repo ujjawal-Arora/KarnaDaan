@@ -44,12 +44,11 @@ function SignUp() {
       const response = await axios.post(
         "http://localhost:3000/api/v1/user/google-signin",
         {
-          token: credentialResponse.credential, // You can send the token to your backend
-          googleId: credentialDecoded.sub,
+         
           email: credentialDecoded.email,
           firstName: credentialDecoded.given_name,
           lastName: credentialDecoded.family_name,
-        }
+        },{withCredentials:true}
       );
 
       console.log("Backend Response:", response);

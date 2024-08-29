@@ -9,7 +9,7 @@ function Appbar() {
     <div className="border-b-2 bg-orange-50 h-20 p-2 items-center flex justify-evenly">
       <div className="text-3xl font-bold">
         <h1>
-          Karna<span className="text-amber-950">Daan</span>
+          Karan Daan<span className="text-amber-950">Daan</span>
         </h1>
       </div>
 

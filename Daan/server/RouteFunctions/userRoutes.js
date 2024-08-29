@@ -94,60 +94,46 @@ const UpdatePassword = async (req, res) => {
     console.error("Error updating password:", error);
     return res.status(500).json({ error: "An error occurred while updating the password" });
   }
-};
- const GoogleSignIn =async (req, res) => {
-  const {email, firstName,lastName} = req.body;
-  try{
-    if(!email||!firstName||!lastName){
-      return res.status(400).json({ error: "please send all the details" });
+};const GoogleSignIn = async (req, res) => {
+  const { email, firstName, lastName } = req.body;
+  try {
+    if (!email || !firstName || !lastName) {
+      return res.status(400).json({ error: "Please send all the details" });
     }
-    const password = "Sigined in through google"
-    const useAlreadyExsists = await User.findOne({
-      userName: email,
-    });
-    let userId=null;
-    if (!useAlreadyExsists) {
+
+    const password = "Signed in through Google";
+    const userAlreadyExists = await User.findOne({ userName: email });
+    let userId = null;
+
+    if (!userAlreadyExists) {
       const user = await User.create({
-        userName:email,
+        userName: email,
         firstName,
         lastName,
         password,
-      });    
-      const findUser = await User.findOne({
-        userName: email,
-      });  
-      userId=findUser._id;
-      }
-      else{
-      userId=useAlreadyExsists._id;
+      });
+      userId = user._id;
+    } else {
+      userId = userAlreadyExists._id;
     }
 
-    const token=jwt.sign({
-      userId
-     },JWT_SECRET);
-   
-   
-      res.cookie("token", token, 
-         { 
-         httpOnly: true,
-         sameSite: 'None',
-         expires: new Date(Date.now() + 7200000),
-         secure: true, // Set to true if using HTTPS
-   
-         }
-      );
-   
-   
-     res.setHeader('Authorization',`Bearer ${token}`);
-  sendWelcomeMail({email:email});
-    return res.status(200).json({
-      message: "user created",
+    const token = jwt.sign({ userId }, JWT_SECRET);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: 'None',
+      expires: new Date(Date.now() + 7200000), // 2 hours
+      secure: true, // Set to false if testing locally without HTTPS
     });
-          
-  }catch(error){
-    console.log("An error occurred while signing ",error);
+
+    res.setHeader('Authorization', `Bearer ${token}`);
+    sendWelcomeMail({ email: email });
+
+    return res.status(200).json({ message: "User created" });
+
+  } catch (error) {
+    console.log("An error occurred while signing in ", error);
     return res.status(500).json({ error: "An error occurred while signing in through Google" });
   }
- }
-
+};
 export { SignUp, SignIn,UpdatePassword,GoogleSignIn };

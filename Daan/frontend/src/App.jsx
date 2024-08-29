@@ -12,6 +12,7 @@ import FillOtp from './Components/Register/FillOtp'
 import FillOtpForget from './Components/Register/FillOtpForgot'
 import UpdatePassword from './Components/Register/UpdatePassword'
 import Requests from './Pages/Requests'
+import Footer from './material/Footer'
 function App() {
 
   return (
@@ -33,8 +34,10 @@ function App() {
      <Route exact path="/update-password"  element={<UpdatePassword/>} />
 
      <Route exact path="/main" element={<MainCard/>} />
+     <Route exact path='/maincard/:id' element={<MainCard/> }/>
 
     </Routes>
+    <Footer/>
    </BrowserRouter>
   
   )
