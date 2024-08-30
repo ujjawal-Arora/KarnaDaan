@@ -5,6 +5,10 @@ import { Link, useNavigate,useLocation } from 'react-router-dom';
 import { GoogleLogin } from "@react-oauth/google";
 import {jwtDecode} from "jwt-decode";
 import toast, { Toaster } from 'react-hot-toast';
+import LoadingAnimation from '../../assets/loading.json'
+import { useDispatch } from 'react-redux';
+import { authActions } from '../../redux/Slice/slice.js';import Lottie from 'lottie-react'
+
 // Hook to detect location changes
 
 function SignIn() {
@@ -15,12 +19,16 @@ function SignIn() {
     console.log('Location changed:', location);
   }, [location]);
 
+  const dispatch=useDispatch();
 
   // Hooks to store email and password
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSignIn = async () => {
+    setLoading(true);
+
     try {
       const response = await axios.post('http://localhost:3000/api/v1/user/signin', 
         { userName: email, password: password }, 
@@ -36,6 +44,8 @@ function SignIn() {
     } catch (error) {
       toast.error('Error during sign-in. Please check your credentials.');
       console.error('Error during sign-in:', error);
+      setLoading(false);
+
     }
   };
 
@@ -49,10 +59,13 @@ function SignIn() {
           email: credentialDecoded.email,
           firstName: credentialDecoded.given_name,
           lastName: credentialDecoded.family_name,
+        },{
+          withCredentials:true
         }
       );
 
       if (response.status === 200) {
+        dispatch(authActions.login());
         toast.success('Google Sign-in successful! Redirecting...');
         setTimeout(() =>{
           navigate('/');
@@ -121,7 +134,19 @@ function SignIn() {
                   className='py-3 rounded-xl bg-orange-400 text-white text-lg font-bold'
                   onClick={handleSignIn}
                 >
-                  Sign in
+                 {loading?
+                 <Lottie
+                 animationData={LoadingAnimation}
+                 style={{
+                   width: 40,
+                   height: 40,
+                   display: 'flex',
+                   justifyContent: 'center',
+                   alignItems: 'center',
+                   margin: 'auto', // Centering horizontally 
+                 }}
+               />
+                 : "Sign in"}
                 </button>
               </div>
               <div className="flex justify-center mt-5">

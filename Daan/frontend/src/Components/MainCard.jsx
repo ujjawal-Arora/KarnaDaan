@@ -4,6 +4,7 @@ import ImageThumbnil from './MainCardCompo/ImageThumbnil';
 import MapComponent from './MainCardCompo/MapComponent';
 
 const MainCard = () => {
+  
   const location = useLocation();
   const data = location.state;
   if (!data || !data.imageUrls) {

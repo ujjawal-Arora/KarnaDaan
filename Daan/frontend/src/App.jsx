@@ -12,8 +12,15 @@ import FillOtpForget from './Components/Register/FillOtpForgot'
 import UpdatePassword from './Components/Register/UpdatePassword'
 import Requests from './Pages/Requests'
 import Footer from './material/Footer'
-function App() {
+import { useDispatch,useSelector } from'react-redux';
+import { authActions } from './redux/Slice/slice.js';
 
+
+function App() {
+ const dispatch=useDispatch();
+ const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn)
+ console.log(isLoggedIn)
+ 
   return (
    <BrowserRouter>
     <Routes>

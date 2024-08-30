@@ -28,10 +28,8 @@ const  verifyOtpWithToken = async (req,res)=>{
  
     res.cookie("token", token, 
        { 
-       httpOnly: true,
-       sameSite: 'None',
+       httpOnly: false,
        expires: new Date(Date.now() + 7200000),
-       secure: true, // Set to true if using HTTPS
  
        }
     );

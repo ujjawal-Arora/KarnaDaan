@@ -5,8 +5,11 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
-
+import { useDispatch,useSelector } from'react-redux';
+import { authActions } from '../../redux/Slice/slice.js';
 function FillOtp({istrue}) {
+  const dispatch=useDispatch();
+  const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn)
     const [otp, setOtp] = useState("");
     const [timeLeft, setTimeLeft] = useState(240); // 2 minutes in seconds
     const[resend,setResend]=useState(false);
@@ -27,9 +30,12 @@ function FillOtp({istrue}) {
               if(response.data.token){
                 toast.success('OTP Verified! Redirecting...');
               }
+              dispatch(authActions.login());
+               console.log(isLoggedIn)
               setTimeout(() =>{
                 navigate('/');
               },2000)
+
         }catch(err){
           toast.error('Error while submitting');
 
@@ -38,23 +44,7 @@ function FillOtp({istrue}) {
         }
     };
 
-  //   const handleforgot =  async() => {
-  //     console.log("OTP submitted:", otp);
-  //     try{
-  //           const response =await axios.post('http://localhost:3000/api/v1/otp/verify-token-otp',{otp:otp},{ withCredentials: true });
-  //           console.log(response);
-  //           if(response.data.token){
-            
-  //               toast.success('OTP Verified! Redirecting...');
-              
-  //                 navigate('/');
-             
-  //           }
-  //     }catch(err){
-  //         console.error("Error submitting OTP:", err);
-
-  //     }
-  // };
+  
 
     useEffect(() => {
         if (timeLeft > 0) {

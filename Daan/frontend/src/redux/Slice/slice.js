@@ -1,32 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
+import Cookies from 'js-cookie';
 
-const dataSlice = createSlice({
-    name: 'data',
-    initialState: {
-      searchData: null,
-      locationData: null,
-    },
+// const token = ;
+// console.log(token)
+const initialState = {
+  isLoggedIn: Cookies.get('token')!=null?true:false, // initial state
+};
+
+const authSlice = createSlice({
+  name:'auth',
+  initialState,
     reducers: {
-      setSearchData: (state, action) => {
-        state.searchData = action.payload;
-      },
-      setLocationData: (state, action) => {
-        state.locationData = action.payload;
-      },
-      fetchSearchDataSuccess: (state, action) => {
-        state.searchData = action.payload;
-      },
-      fetchLocationDataSuccess: (state, action) => {
-        state.locationData = action.payload;
-      },
+      login:(state)=>{
+        state.isLoggedIn = true;
+    },
+    logout:(state)=>{
+       state.isLoggedIn = false;
+    }
     },
   });
   
-  export const {
-    setSearchData,
-    setLocationData,
-    fetchSearchDataSuccess,
-    fetchLocationDataSuccess,
-  } = dataSlice.actions;
-  
-  export default dataSlice.reducer;
+  export const authActions = authSlice.actions;
+  export const authstate=(state)=>state.auth.isLoggedIn;
+  export default authSlice.reducer;

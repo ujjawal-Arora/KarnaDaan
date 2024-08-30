@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import toast, { Toaster } from 'react-hot-toast';
+import LoadingAnimation from '../../assets/loading.json'
+import Lottie from 'lottie-react'
 
 function SignUp() {
   const navigate = useNavigate();
@@ -15,10 +17,17 @@ function SignUp() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const [rememberMe, setRememberMe] = useState(false);
 
   // Handle the form submission
   const handleSubmit = async (e) => {
+
+    setLoading(true);
+  
+  
+
     e.preventDefault();
 try{
     const response = await axios.post(
@@ -30,16 +39,20 @@ try{
         password: password,
       }
     );
-    console.log(response);
+   
     if (response.status == 200) {
       toast.success('You are Successfully SignedUp! Redirecting...');
       setTimeout(() =>{
         navigate('/signin');
       },6000)
+      
+    
     }
   }catch(err){
     toast.error('Error during sign-up. Please check your credentials.');
     console.error('Error during sign-in:', err);
+    setLoading(false);
+
   }
   };
 
@@ -155,7 +168,19 @@ try{
                   type="submit"
                   className="py-3 rounded-xl bg-orange-400 text-white text-lg font-bold"
                 >
-                  Sign up
+                {loading?
+                 <Lottie
+                 animationData={LoadingAnimation}
+                 style={{
+                   width: 40,
+                   height: 40,
+                   display: 'flex',
+                   justifyContent: 'center',
+                   alignItems: 'center',
+                   margin: 'auto', // Centering horizontally 
+                 }}
+               />
+                 : "Sign up"}
                 </button>
                 {/* <button
                             className='flex rounded-xl py-3 border-2 border-gray-100 items-center justify-center gap-2'

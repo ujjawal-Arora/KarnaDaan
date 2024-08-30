@@ -2,9 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FrontCard from '../Components/FrontCard';
 import axios from 'axios';
+import { useDispatch,useSelector } from'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
+
 import Appbar from '../Components/Appbar'; // Ensure this path is correct
 
 const FrontCards = () => {
+  const dispatch=useDispatch();
+  const isLoggedIn=useSelector((state)=>state.auth.isLoggedIn);
+
+  console.log(isLoggedIn)
   const [filteredCards, setFilteredCards] = useState([]);
   const [dataSet, setData] = useState([]);
   const navigate = useNavigate();
@@ -39,7 +46,11 @@ const FrontCards = () => {
 
   // const handleCardClick = (id) => {
     const handleCardClick = (sequentialId,card) => {
-      navigate(`/maincard/${sequentialId}`,{state:card});
+if(isLoggedIn){
+  navigate(`/maincard/${sequentialId}`,{state:card});
+}else{
+  toast.error('Login to Continue');
+}
     };
   // };
 
@@ -49,6 +60,7 @@ const FrontCards = () => {
       {/* <Appbar onSearch={handleSearch} /> */}
       
       <div className="w-full flex flex-wrap justify-center items-center gap-4 mt-4">
+      <Toaster position="top-center" reverseOrder={false} />
   {filteredCards.length > 0 ? (
     filteredCards.map((card) => (
       <div key={card.sequentialId} onClick={() => handleCardClick(card.sequentialId,card)}>

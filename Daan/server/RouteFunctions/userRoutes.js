@@ -120,10 +120,10 @@ const UpdatePassword = async (req, res) => {
     const token = jwt.sign({ userId }, JWT_SECRET);
 
     res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: 'None',
-      expires: new Date(Date.now() + 7200000), // 2 hours
-      secure: true, // Set to false if testing locally without HTTPS
+      httpOnly: false,
+      // sameSite: 'None',
+      maxAge: new Date(Date.now() + 7200000), // 2 hours
+      // secure: true, // Set to false if testing locally without HTTPS
     });
 
     res.setHeader('Authorization', `Bearer ${token}`);
