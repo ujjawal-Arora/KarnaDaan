@@ -1,8 +1,16 @@
 import express from 'express';
-import bodyParser from 'body-parser';
-// import cloudinary from '../ImageUpload/cloudinary.js';
-import {ImageUpload} from '../RouteFunctions/uploadImageRoutes.js'
-const router=  express.Router();
-router.use(bodyParser.json({ limit: '50mb' }));
-router.post('/upload-image',ImageUpload)
+import multer from 'multer';
+import { ImageUpload } from '../RouteFunctions/uploadImageRoutes.js';
+
+const router = express.Router();
+
+// Multer configuration
+// const storage = multer.memoryStorage(); // Store file in memory buffer
+// const upload = multer({ storage });
+const upload = multer({
+    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
+  });
+// Image upload route using multer
+router.post('/upload-image', upload.single('image'), ImageUpload);
+
 export default router;

@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import {BrowserRouter, Routes,Route} from 'react-router-dom'
 import Donates from './Pages/Donates'
-import Login from './Components/Login/Login'
 import SignUp from './Components/Register/SignUp'
 import SignIn from './Components/Register/SignIn'
 
@@ -23,7 +22,6 @@ function App() {
      <Route exact path="/donate"  element={<Donates/>} />
      <Route exact path="/request"  element={<Requests/>} />
 
-     <Route exact path="/login"  element={<Login/>} />
      <Route exact path="/signup"  element={<SignUp/>} />
      <Route exact path="/signin"  element={<SignIn/>} />
      <Route exact path="/forgot"  element={<Forgot/>} />

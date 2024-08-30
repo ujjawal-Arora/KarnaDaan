@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { CiCamera } from "react-icons/ci";
 import { FaArrowLeft } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
+
 import axios from "axios";
 
 function Donates() {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [wishListed, setWishlisted] = useState(false);
@@ -50,7 +53,6 @@ function Donates() {
           .then((response) => response.data.url)
           .catch((error) => {
             console.error("Error uploading image", error);
-            alert("Error while uploading image");
             return null;
           });
       } else {
@@ -84,6 +86,10 @@ function Donates() {
       );
   
       console.log("Post added successfully:", response.data);
+      toast.success(' Your Post Posted successfully');
+      setTimeout(() => {
+           navigate('/');
+      },2000)
     } catch (error) {
       console.error("Error adding post:", error.response ? error.response.data : error.message);
     }
@@ -99,6 +105,8 @@ function Donates() {
         </div>
       </div>
       <div className="container mx-auto p-4">
+      <Toaster position="top-center" reverseOrder={false} />
+
         <h1 className="text-3xl font-bold mb-4">Post Your Donation</h1>
         <div className="border p-4 mb-4">
           <h2 className="text-xl font-semibold mb-2">Categories</h2>

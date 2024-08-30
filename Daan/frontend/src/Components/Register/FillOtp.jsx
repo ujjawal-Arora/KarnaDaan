@@ -4,15 +4,18 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
+
 function FillOtp({istrue}) {
     const [otp, setOtp] = useState("");
     const [timeLeft, setTimeLeft] = useState(240); // 2 minutes in seconds
     const[resend,setResend]=useState(false);
+
         const navigate=useNavigate();
     const handleChangeOtp = (newOtp) => {
       setOtp(newOtp);
     };
-    const[forgot,setForgot] = useState(false);
+    // const[forgot,setForgot] = useState(false);
     if(istrue){
       setForgot(true);
     }
@@ -22,27 +25,36 @@ function FillOtp({istrue}) {
               const response =await axios.post('http://localhost:3000/api/v1/otp/verify-token-otp',{otp:otp},{ withCredentials: true });
               console.log(response);
               if(response.data.token){
-                navigate('/');
+                toast.success('OTP Verified! Redirecting...');
               }
+              setTimeout(() =>{
+                navigate('/');
+              },2000)
         }catch(err){
+          toast.error('Error while submitting');
+
             console.error("Error submitting OTP:", err);
 
         }
     };
 
-    const handleforgot =  async() => {
-      console.log("OTP submitted:", otp);
-      try{
-            const response =await axios.post('http://localhost:3000/api/v1/otp/verify-token-otp',{otp:otp},{ withCredentials: true });
-            console.log(response);
-            if(response.data.token){
-              navigate('/');
-            }
-      }catch(err){
-          console.error("Error submitting OTP:", err);
+  //   const handleforgot =  async() => {
+  //     console.log("OTP submitted:", otp);
+  //     try{
+  //           const response =await axios.post('http://localhost:3000/api/v1/otp/verify-token-otp',{otp:otp},{ withCredentials: true });
+  //           console.log(response);
+  //           if(response.data.token){
+            
+  //               toast.success('OTP Verified! Redirecting...');
+              
+  //                 navigate('/');
+             
+  //           }
+  //     }catch(err){
+  //         console.error("Error submitting OTP:", err);
 
-      }
-  };
+  //     }
+  // };
 
     useEffect(() => {
         if (timeLeft > 0) {
@@ -58,9 +70,13 @@ function FillOtp({istrue}) {
       try {
           const response = await axios.post('http://localhost:3000/api/v1/otp/resend-otp', {}, { withCredentials: true });
           console.log("Resent OTP:", response.data.otp);
+          toast.success('OTP Resended');
+
           setTimeLeft(300); // Reset the timer to 5 minutes
           setResend(true); 
       } catch (err) {
+        toast.error('Error while submitting');
+
           console.error("Error resending OTP:", err);
       }
   };
@@ -81,6 +97,8 @@ function FillOtp({istrue}) {
         </div>
         
         <div className='flex justify-center gap-28 mb-10 flex-grow'>
+        <Toaster position="top-center" reverseOrder={false} />
+
           <div className='flex items-center justify-center'>
             <div className='bg-white shadow-xl px-8 py-10 rounded-3xl border-2 border-gray-200 w-[65vh]'>
               <h1 className='text-5xl font-semibold text-center'>
@@ -94,7 +112,7 @@ function FillOtp({istrue}) {
                 <div className='mt-8 flex flex-col gap-y-4'>
                   <button
                     className='py-3 rounded-xl bg-orange-400 text-white text-lg font-bold'
-                    onClick={forgot?handleSubmit:handleforgot}
+                    onClick={handleSubmit}
                   >
                     Submit
                   </button>

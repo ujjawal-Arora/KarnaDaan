@@ -5,6 +5,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import toast, { Toaster } from 'react-hot-toast';
 
 function SignUp() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ function SignUp() {
   // Handle the form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+try{
     const response = await axios.post(
       "http://localhost:3000/api/v1/user/signup",
       {
@@ -31,8 +32,15 @@ function SignUp() {
     );
     console.log(response);
     if (response.status == 200) {
-      navigate("/signin");
+      toast.success('You are Successfully SignedUp! Redirecting...');
+      setTimeout(() =>{
+        navigate('/signin');
+      },6000)
     }
+  }catch(err){
+    toast.error('Error during sign-up. Please check your credentials.');
+    console.error('Error during sign-in:', err);
+  }
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
@@ -70,6 +78,8 @@ function SignUp() {
       </div>
 
       <div className="flex justify-center gap-28 mb-10 flex-grow">
+      <Toaster position="top-center" reverseOrder={false} />
+
         <div className="flex items-center justify-center">
           <form
             className="bg-white shadow-xl px-8 py-9 rounded-3xl border-2 border-gray-200 w-[60vh]"

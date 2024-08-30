@@ -13,7 +13,7 @@ router.delete("/delete-post/:postId",authenticate,deletePost);
 
 router.put("/update-post/:postId",authenticate,updatePost);
 
-router.get("/get-allusers-nondonated-posts",authenticate,getAllUsersNonDonatedPosts);
+router.get("/get-allusers-nondonated-posts",getAllUsersNonDonatedPosts);
 router.get("/get-allusers-donated-posts",authenticate,getAllUsersDonatedPosts);
 
 router.get("/get-all-wishlisted-posts",authenticate,getAllwishListedPosts);

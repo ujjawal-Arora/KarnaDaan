@@ -12,11 +12,13 @@ const FrontCards = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/posts/get-all-posts', { withCredentials: true });
-        const postsWithIds = response.data.posts.map((post, index) => ({
+        const response = await axios.get('http://localhost:3000/api/v1/posts/get-allusers-nondonated-posts', { withCredentials: true });
+        console.log(response)
+        const postsWithIds = response.data.data.map((post, index) => ({
           ...post,
           sequentialId: index + 1, // Assign sequential ID starting from 1
         }));
+
         setData(postsWithIds);
         setFilteredCards(postsWithIds); // Initialize with all posts
       } catch (error) {
