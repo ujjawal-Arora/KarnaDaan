@@ -36,8 +36,8 @@ const FrontCards = () => {
   };
 
   // const handleCardClick = (id) => {
-    const handleCardClick = (sequentialId) => {
-      navigate(`/maincard/${sequentialId}`);
+    const handleCardClick = (sequentialId,card) => {
+      navigate(`/maincard/${sequentialId}`,{state:card});
     };
   // };
 
@@ -49,7 +49,7 @@ const FrontCards = () => {
       <div className="w-full flex flex-wrap justify-center items-center gap-4 mt-4">
   {filteredCards.length > 0 ? (
     filteredCards.map((card) => (
-      <div key={card.sequentialId} onClick={() => handleCardClick(card.sequentialId)}>
+      <div key={card.sequentialId} onClick={() => handleCardClick(card.sequentialId,card)}>
         <FrontCard
           imgSrc={card.imageUrls[0]}  // Assuming images is an array
           imgAlt={card.title}
