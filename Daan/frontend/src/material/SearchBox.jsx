@@ -57,12 +57,12 @@ const SearchBox = () => {
             placeholder="Search a place"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            className='border border-amber-950  h-10 w-80'
+            className='border  bg-zinc-200 text-zinc-800 placeholder:text-zinc-800 rounded p-2 outline-none  h-10 w-80'
           />
         </Autocomplete>
       </LoadScript>
 
-      <select className='w-52 border border-amber-950 px-7 rounded ' 
+      <select className='w-52 border bg-zinc-200 px-7 rounded ' 
       onChange={handleCategoryChange} value={category}>
         <option value="">Select Category</option>
         <option value="restaurant">Restaurant</option>
@@ -73,7 +73,7 @@ const SearchBox = () => {
       </select>
 
       <button 
-      className='bg-amber-950 p-2  w-20 rounded-lg text-white font-semibold '
+      className='bg-neutral-600 font-bold hover:bg-neutral-500 p-2  w-20 rounded-lg text-white  '
       onClick={fetchProperties}>Search</button>
 
       {/* <div>

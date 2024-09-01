@@ -69,6 +69,8 @@ function SignIn() {
         toast.success('Google Sign-in successful! Redirecting...');
         setTimeout(() =>{
           navigate('/');
+          window.location.reload(); // Refresh the page
+
         },5000)
       }
     } catch (error) {
@@ -82,9 +84,13 @@ function SignIn() {
       
       {/* Top Section with Back Arrow */}
       <div className='p-4'>
-        <Link to="/">
-          <FaArrowLeft className='text-2xl text-gray-600' />
-        </Link>
+        {/* <Link to="/"> */}
+          <FaArrowLeft onClick={()=>{
+            navigate('/');
+            window.location.reload(); 
+
+          }} className='text-2xl text-gray-600' />
+        {/* </Link> */}
       </div>
       
       <div className='flex justify-center gap-28 mb-10 flex-grow'>

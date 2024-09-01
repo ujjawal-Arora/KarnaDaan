@@ -5,7 +5,7 @@ import { faFacebookF, faTwitter, faInstagram } from '@fortawesome/free-brands-sv
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white w-full py-10" style={{ backgroundColor: '#1F2937' }}>
+    <footer className="bg-zinc-800 text-white w-full py-10">
       <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 animate_animated animate_fadeIn">
         <div>
           <h4 className="font-semibold text-lg mb-4" style={{ color: '#FFD700' }}>Popular Locations</h4>

@@ -15,7 +15,6 @@ import Footer from './material/Footer'
 import { useDispatch,useSelector } from'react-redux';
 import { authActions } from './redux/Slice/slice.js';
 
-
 function App() {
  const dispatch=useDispatch();
  const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn)
@@ -24,7 +23,6 @@ function App() {
   return (
    <BrowserRouter>
     <Routes>
-   
      <Route exact path="/"  element={<Home/>} />
      <Route exact path="/donate"  element={<Donates/>} />
      <Route exact path="/request"  element={<Requests/>} />
@@ -33,18 +31,15 @@ function App() {
      <Route exact path="/signin"  element={<SignIn/>} />
      <Route exact path="/forgot"  element={<Forgot/>} />
      <Route exact path="/enter-otp"  element={<FillOtp/>} />
-
      <Route exact path="/enter-forget-otp"  element={<FillOtpForget/>} />
 
      <Route exact path="/update-password"  element={<UpdatePassword/>} />
-
      <Route exact path="/main" element={<MainCard/>} />
      <Route exact path='/maincard/:id' element={<MainCard/> }/>
-
     </Routes>
     <Footer/>
    </BrowserRouter>
-  
+
   )
 }
 

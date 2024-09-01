@@ -15,9 +15,9 @@ const Notifications = () => {
   };
 
   return (
-    <div className="relative inline-block">
+    <div className="relative mt-1 inline-block">
       <div 
-        className="text-4xl cursor-pointer text-yellow-600 " 
+        className="text-4xl cursor-pointer  text-yellow-400 hover:text-yellow-600 " 
         onClick={toggleNotifications}
       >
         <FaBell />

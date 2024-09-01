@@ -62,7 +62,7 @@ async function sendWelcomeMail({email}) {
                                             <table style="font-weight: normal; border-collapse: collapse; border: 0; margin: 0; padding: 0;">
                                                 <tr>
                                                     <td class="head-title" style="color: #333; font-size: 28px; line-height: 34px; font-weight: bold; text-align: center;">
-                                                        Welcome to कर्ण Daan, Amit Kumar!
+                                                        Welcome to कर्ण Daan!
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -87,7 +87,7 @@ Explore our features, and get started with donating, requesting resources, or fu
                                                 </tr>
                                                 <tr>
                                                     <td class="text" style="color: #555; font-size: 16px; line-height: 26px;">
-                                                       <p>Hello Amit,</p>
+                                                       <p>Hello,</p>
 <p>Welcome to कर्ण Daan! We’re excited to have you as part of our community dedicated to making a difference. Whether you’re here to donate resources, request support, or fund essential needs, our platform is here to connect you with those who care.</p>
 <p>Take your time to explore the possibilities and see how you can contribute or receive the help you need. If you have any questions or need assistance, our support team is always ready to help.</p>
 <p>Best regards,<br>The कर्ण Daan Team</p>

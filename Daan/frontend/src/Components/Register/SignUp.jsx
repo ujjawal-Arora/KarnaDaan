@@ -74,7 +74,9 @@ try{
 
       console.log("Backend Response:", response);
       if (response.status === 200) {
-        navigate("/"); // Redirect to your dashboard or desired route
+        navigate("/");
+        window.location.reload(); // Refresh the page
+        // Redirect to your dashboard or desired route
       }
     } catch (error) {
       console.error("Error during Google Sign-In:", error);

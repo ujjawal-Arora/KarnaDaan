@@ -48,6 +48,8 @@ const FrontCards = () => {
     const handleCardClick = (sequentialId,card) => {
 if(isLoggedIn){
   navigate(`/maincard/${sequentialId}`,{state:card});
+  window.location.reload(); // Refresh the page
+
 }else{
   toast.error('Login to Continue');
 }
@@ -55,11 +57,11 @@ if(isLoggedIn){
   // };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center bg-gray-100 p-4">
+    <div className="min-h-screen  w-full flex flex-col items-center bg-gray-200 p-4">
       {/* Ensure Appbar is rendered and passes the handleSearch function */}
       {/* <Appbar onSearch={handleSearch} /> */}
       
-      <div className="w-full flex flex-wrap justify-center items-center gap-4 mt-4">
+      <div className="w-full flex flex-wrap  justify-center items-center gap-10 mt-4">
       <Toaster position="top-center" reverseOrder={false} />
   {filteredCards.length > 0 ? (
     filteredCards.map((card) => (
@@ -71,6 +73,7 @@ if(isLoggedIn){
           description={card.description}
           btntext="Learn More"
           wishlist={card.wishlist}
+
         />
       </div>
     ))

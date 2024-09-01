@@ -7,8 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch,useSelector } from'react-redux';
 import { authActions } from '../../redux/Slice/slice.js';
+import Lottie from 'lottie-react'
+import LoadingAnimation from '../../assets/loading.json'
+
 function FillOtp({istrue}) {
   const dispatch=useDispatch();
+  const [loading, setLoading] = useState(false);
+
   const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn)
     const [otp, setOtp] = useState("");
     const [timeLeft, setTimeLeft] = useState(240); // 2 minutes in seconds
@@ -24,6 +29,8 @@ function FillOtp({istrue}) {
     }
     const handleSubmit =  async() => {
         console.log("OTP submitted:", otp);
+        setLoading(true);
+
         try{
               const response =await axios.post('http://localhost:3000/api/v1/otp/verify-token-otp',{otp:otp},{ withCredentials: true });
               console.log(response);
@@ -34,10 +41,11 @@ function FillOtp({istrue}) {
                console.log(isLoggedIn)
               setTimeout(() =>{
                 navigate('/');
-              },2000)
+              },3000)
 
         }catch(err){
           toast.error('Error while submitting');
+          setLoading(false);
 
             console.error("Error submitting OTP:", err);
 
@@ -104,7 +112,19 @@ function FillOtp({istrue}) {
                     className='py-3 rounded-xl bg-orange-400 text-white text-lg font-bold'
                     onClick={handleSubmit}
                   >
-                    Submit
+                     {loading?
+                 <Lottie
+                 animationData={LoadingAnimation}
+                 style={{
+                   width: 40,
+                   height: 40,
+                   display: 'flex',
+                   justifyContent: 'center',
+                   alignItems: 'center',
+                   margin: 'auto', // Centering horizontally 
+                 }}
+                 />
+                   : "Submit"}
                   </button>
                 </div>
 
