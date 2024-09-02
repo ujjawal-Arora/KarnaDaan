@@ -54,7 +54,7 @@ function Appbar() {
           <Notifications />
         </div>
 
-        <div className="border-2 rounded-lg">
+        <div className=" hover:border-2 rounded-lg">
           <button
             onClick={() => {
               if (isLoggedIn) {
@@ -66,7 +66,7 @@ function Appbar() {
                 window.location.reload();
               }
             }}
-            className="bg-neutral-600 hover:bg-neutral-500 h-11 w-28 p-1 px-2 pb-1 rounded-lg text-white font-bold"
+            className="bg-neutral-600  h-11 w-28 p-1 px-2 pb-1 rounded-lg text-white font-bold"
           >
             {isLoggedIn ? (
               <div className="flex items-center gap-2">

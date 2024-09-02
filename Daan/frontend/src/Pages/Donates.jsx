@@ -128,6 +128,8 @@ function Donates() {
               <option value="sports">Sports Equipment</option>
               <option value="tools">Tools</option>
               <option value="art">Art Supplies</option>
+              <option value="Cycle">Cycle</option>
+
             </select>
           </div>
         </div>
