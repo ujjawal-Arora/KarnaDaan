@@ -33,6 +33,7 @@ const MainCard = () => {
     navigate('/'); // Navigate back to the previous page
     window.location.reload(); 
   };
+  
 
   const latitude = 30.2110; 
   const longitude = 74.9455;

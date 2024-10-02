@@ -21,6 +21,9 @@ const UserSchema= new mongoose.Schema({
         required:true,
         minlength:8,
     },
+    profile_pic:{
+        type:String,
+    },
     posts:[
         {
             type:mongoose.Types.ObjectId,

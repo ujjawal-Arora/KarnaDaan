@@ -4,52 +4,58 @@ import storeOtp from '../Session/storeOtp.js';
 import sendMail from '../Controller/sendOtpMail.js';
 import { sendWelcomeMail } from '../Controller/sendWelcomeMail.js';
 import User from '../models/userModel.js';
-const  verifyOtpWithToken = async (req,res)=>{
-  const {otp}=req.body;
+const verifyOtpWithToken = async (req, res) => {
+  const { otp } = req.body;
   
   try {
-        if(!otp){
-          return res.status(400).json({error:"OTP is required"});
-      }
-      console.log("sessionOtp",req.session.otp);
-      console.log("Otp",otp);
-      const userId=req.session.userId;
-      console.log("userId at verify",userId);
+    // Check if OTP is provided
+    if (!otp) {
+      return res.status(400).json({ error: "OTP is required" });
+    }
+    
+    // Log session OTP and provided OTP for debugging
+    console.log("sessionOtp", req.session.otp);
+    console.log("Otp", otp);
+    
+    const userId = req.session.userId;
+    console.log("userId at verify", userId);
+    
+    if (req.session.otp != otp) {
+      return res.status(401).json({ error: "Invalid OTP" });
+    }
+    
+    const token = jwt.sign({
+      userId
+    }, JWT_SECRET);
+    
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(401).json({ error: "User not found. Please try again later." });
+    }
 
-      if(req.session.otp!=otp){
-        return res.status(401).json({error:"Invalid OTP"});
-      }
-      // const userId=req.session.userId;
+    res.cookie("token", token, { 
+      httpOnly: false,
+      expires: new Date(Date.now() + 7200000), // 2 hours
+    });
 
-  const token=jwt.sign({
-    userId
-   },JWT_SECRET);
- 
- 
-    res.cookie("token", token, 
-       { 
-       httpOnly: false,
-       expires: new Date(Date.now() + 7200000),
- 
-       }
-    );
- 
- 
-   res.setHeader('Authorization',`Bearer ${token}`);
-const userName=req.session.userName;
-sendWelcomeMail({email:userName});
- 
+    res.setHeader('Authorization', `Bearer ${token}`);
+
+    const userName = req.session.userName;
+    sendWelcomeMail({ email: userName });
+    
     return res.status(200).json({
-     userId,
-     token:token,
-    })
- 
-    }
-    catch(error){
-        console.log(error);
-        return res.status(500).json({ error: 'An error occurred while verifying OTP' });
-    }
-}
+      userId,
+      user,
+      token: token,
+      message: "OTP verified successfully and user logged in."
+    });
+    
+  } catch (error) {
+    console.error("Error during OTP verification:", error);
+    return res.status(500).json({ message: 'An error occurred while verifying OTP. Please try again later.' });
+  }
+};
+
 
 const resendOtp = async(req,res)=>{
    try {

@@ -33,18 +33,38 @@ function FillOtp({istrue}) {
 
         try{
               const response =await axios.post('http://localhost:3000/api/v1/otp/verify-token-otp',{otp:otp},{ withCredentials: true });
-              console.log(response);
+              console.log("response",response);
+              const userData = response.data.user;
+              
+              dispatch(authActions.setUser({
+                _id: userData._id,
+                name: userData.firstName,
+                email: userData.userName,
+                profile_pic: userData.profile_pic,
+              }));
+              localStorage.setItem('user', JSON.stringify({
+                _id: userData._id,
+                name: userData.firstName,
+                email: userData.userName,
+                profile_pic: userData.profile_pic,
+              }));
               if(response.data.token){
-                toast.success('OTP Verified! Redirecting...');
+                toast.success(response.data.message);
               }
               dispatch(authActions.login());
+             
+          
                console.log(isLoggedIn)
               setTimeout(() =>{
                 navigate('/');
               },3000)
 
         }catch(err){
-          toast.error('Error while submitting');
+          if (err.response) {
+            toast.error(err.response.data.error || "An error occurred during sign-in");
+          } else {
+            toast.error("Network error or server is unreachable");
+          }
           setLoading(false);
 
             console.error("Error submitting OTP:", err);
@@ -68,13 +88,16 @@ function FillOtp({istrue}) {
       try {
           const response = await axios.post('http://localhost:3000/api/v1/otp/resend-otp', {}, { withCredentials: true });
           console.log("Resent OTP:", response.data.otp);
-          toast.success('OTP Resended');
+          toast.success(response.data.message);
 
           setTimeLeft(300); // Reset the timer to 5 minutes
           setResend(true); 
       } catch (err) {
-        toast.error('Error while submitting');
-
+        if (err.response) {
+          toast.error(err.response.data.error || "An error occurred during OTP request");
+        } else {
+          toast.error("Network error or server is unreachable");
+        }
           console.error("Error resending OTP:", err);
       }
   };
@@ -95,7 +118,6 @@ function FillOtp({istrue}) {
         </div>
         
         <div className='flex justify-center gap-28 mb-10 flex-grow'>
-        <Toaster position="top-center" reverseOrder={false} />
 
           <div className='flex items-center justify-center'>
             <div className='bg-white shadow-xl px-8 py-10 rounded-3xl border-2 border-gray-200 w-[65vh]'>

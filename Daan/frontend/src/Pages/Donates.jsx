@@ -3,7 +3,7 @@ import { CiCamera } from "react-icons/ci";
 import { FaArrowLeft } from "react-icons/fa6";
 import { Link,useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
-
+import uploadFile from "../Helper/upload";
 import axios from "axios";
 
 function Donates() {
@@ -44,31 +44,39 @@ function Donates() {
     }
   };
   const handleImageUrls = async () => {
-    const uploadPromises = images.map((img) => {
-      if (img) {
-        return axios
-          .post("http://localhost:3000/api/v1/image/upload-image", {
-            preview: img,
-          })
-          .then((response) => response.data.url)
-          .catch((error) => {
-            console.error("Error uploading image", error);
-            return null;
-          });
-      } else {
-        return Promise.resolve(null); // If no image, return null
-      }
-    });
-  //map was not storing the response .url bcz map is not synchronus but prommise all is syncronus function
-    const uploadedUrls = await Promise.all(uploadPromises);
-    alert("Images uploaded successfully");
-    return uploadedUrls;
+    try {
+      // Create an array of promises for each image upload
+      const uploadPromises = images.map((img) => {
+        if (img) {
+          return uploadFile(img); // Upload the actual image
+        } else {
+          return Promise.resolve(null); // If no image, resolve with null
+        }
+      });
+  
+      // Wait for all the promises to resolve
+      const uploadedData = await Promise.all(uploadPromises);
+  
+      // Extract URLs from the upload response
+      const uploadedUrls = uploadedData
+        .filter(data => data !== null) // Remove null values
+        .map(data => data.secure_url); // Extract secure_url from each response
+  
+      return uploadedUrls; // Return only URLs
+    } catch (error) {
+      console.error('Error uploading images:', error);
+      alert("Error uploading images");
+      return [];
+    }
   };
+  
+  
   
   const HandleSubmit = async () => {
     try {
-      const urls = await handleImageUrls();//Wait for URLs to be populated
-
+      const urls = await handleImageUrls();
+   //Wait for URLs to be populated
+   console.log(urls)
       const response = await axios.post(
         'http://localhost:3000/api/v1/posts/add-post',
         {

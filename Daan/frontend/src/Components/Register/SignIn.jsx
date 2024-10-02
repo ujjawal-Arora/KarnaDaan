@@ -7,11 +7,13 @@ import {jwtDecode} from "jwt-decode";
 import toast, { Toaster } from 'react-hot-toast';
 import LoadingAnimation from '../../assets/loading.json'
 import { useDispatch } from 'react-redux';
-import { authActions } from '../../redux/Slice/slice.js';import Lottie from 'lottie-react'
+import { authActions } from '../../redux/Slice/slice.js';
+import Lottie from 'lottie-react'
 
 // Hook to detect location changes
 
 function SignIn() {
+  
   const navigate = useNavigate();
   const location = useLocation(); 
   useEffect(() => {
@@ -36,14 +38,17 @@ function SignIn() {
       );
 
       if(response.status === 200){
-        toast.success('OTP Sent to Your Mail successfully! Redirecting...');
+        toast.success(response.data.message);
         setTimeout(() =>{
           navigate('/enter-otp');
         },2000)
       }
-    } catch (error) {
-      toast.error('Error during sign-in. Please check your credentials.');
-      console.error('Error during sign-in:', error);
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data.error || "An error occurred during sign-in");
+      } else {
+        toast.error("Network error or server is unreachable");
+      }
       setLoading(false);
 
     }
@@ -63,10 +68,22 @@ function SignIn() {
           withCredentials:true
         }
       );
-
+      console.log(response);
+      console.log("resgogle",credentialDecoded.given_name)
+      dispatch(authActions.setUser({
+          
+        name:credentialDecoded.given_name,
+     
+      }));
+      localStorage.setItem('user', JSON.stringify({
+      
+        name:credentialDecoded.given_name ,
+        
+      }));
       if (response.status === 200) {
         dispatch(authActions.login());
-        toast.success('Google Sign-in successful! Redirecting...');
+        toast.success(response.data.message);
+       
         setTimeout(() =>{
           navigate('/');
           window.location.reload(); // Refresh the page
@@ -74,7 +91,11 @@ function SignIn() {
         },5000)
       }
     } catch (error) {
-      toast.error('Error during Google Sign-In.');
+      if (err.response) {
+        toast.error(err.response.data.error || "An error occurred during sign-in");
+      } else {
+        toast.error("Network error or server is unreachable");
+      }
       console.error("Error during Google Sign-In:", error);
     }
   };
@@ -94,10 +115,10 @@ function SignIn() {
       </div>
       
       <div className='flex justify-center gap-28 mb-10 flex-grow'>
-        <Toaster position="top-center" reverseOrder={false} />
+        
         
         <div className='flex items-center justify-center'>
-          <div className='bg-white shadow-xl px-8 py-10 rounded-3xl border-2 border-gray-200 w-[60vh]'>
+          <div className='bg-white shadow-xl px-8 py-10 rounded-3xl border-2 border-gray-200 w-[50vh]'>
             <h1 className='text-5xl font-semibold text-center'>
               कर्ण-Daan Login
             </h1>

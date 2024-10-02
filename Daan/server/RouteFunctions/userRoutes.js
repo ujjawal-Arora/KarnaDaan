@@ -6,99 +6,145 @@ import jwt from 'jsonwebtoken';
 
 import { sendWelcomeMail } from '../Controller/sendWelcomeMail.js';
 const {JWT_SECRET}=process.env;
-
 const SignUp = async (req, res) => {
-  const body = req.body;
-  console.log(body);
-  const { success } = SignUpSchema.safeParse(body);
-  console.log(success);
+  try {
+    const body = req.body;
+    console.log(body);
 
-  if (!success) return res.status(400).json({ error: "zod error" });
-  const { userName, firstName, lastName, password } = req.body;
+    const result = SignUpSchema.safeParse(body);
+    const { userName, firstName, lastName, password, profile_pic } = body;
 
-  const useAlreadyExsists = await User.findOne({
-    userName: userName,
+if(!userName || !firstName || !lastName||!password){
+  return res.status(400).json({
+    error: "Fill all the Details", 
+    message: "Zod Error"
   });
-  if (useAlreadyExsists) {
-    return res.status(400).json({ error: "User name already exists" });
+}
+    if (!result.success) {
+      const errorMessage = result.error.errors.map(err => err.message).join(', ');
+      return res.status(400).json({
+        error: errorMessage, 
+      });
+    }
+
+    const userAlreadyExists = await User.findOne({ userName });
+    if (userAlreadyExists) {
+      return res.status(400).json({ error: "User name already exists" });
+    }
+
+    const user = await User.create({
+      userName,
+      firstName,
+      lastName,
+      password,
+      profile_pic,
+    });
+
+    return res.status(200).json({
+      message: "User created successfully",
+      user, 
+    });
+
+  } catch (error) {
+    // Catch and log any other unexpected errors
+    console.error("Error during SignUp process:", error);
+    return res.status(500).json({
+      error: "Something went wrong. Please try again later.",
+    });
   }
-  const user = await User.create({
-    userName,
-    firstName,
-    lastName,
-    password,
-  });
-
-  return res.status(200).json({
-    message: "user created",
-  });
 };
 
+
 const SignIn = async (req, res) => {
-  const body = req.body;
-  const { success } = SigninSchema.safeParse(body);
-  console.log(success);
+  try {
+    const body = req.body;
 
-  if (!success) return res.status(400).json({ error: "zod error" });
-  const { userName, password } = req.body;
 
-  const useAlreadyExsists = await User.findOne({
-    userName: userName,
-  });
-  if (!useAlreadyExsists) {
-    return res.status(400).json({ error: "User doesnot exists" });
+    // Validate the body using Zod 
+    const { userName, password } = body;
+    if(!userName||!password){
+      return res.status(400).json({ error: "Fill all the details"});
+    }
+    const result = SigninSchema.safeParse(body);
+    if (!result.success) {
+      // Extract and return only the error messages
+      const errorMessage = result.error.errors.map(err => err.message).join(', ');
+      return res.status(400).json({
+        error: errorMessage, // Return just the error message(s)
+      });
+    }
+
+   
+
+    // Check if the user exists
+    const userAlreadyExists = await User.findOne({ userName });
+    if (!userAlreadyExists) {
+      return res.status(400).json({ error: "User does not exist" });
+    }
+
+    // Check if the password is correct
+    if (userAlreadyExists.password !== password) {
+      return res.status(400).json({ error: "Password is incorrect" });
+    }
+
+    const userId = userAlreadyExists._id;
+
+    // Generate a 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    console.log("Generated OTP:", otp);
+
+    // Store the user session and OTP
+    req.session.userId = userId;
+    req.session.userName = userName;
+    storeotp({ req, otp });
+
+    // Send the OTP via email
+    await sendMail({ userName, otp });
+
+    return res.status(200).json({ message: "OTP sent to your email." });
+
+  } catch (error) {
+    // Catch and log any unexpected errors
+    console.error("Error during SignIn process:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      error: "Something went wrong. Please try again later.",
+    });
   }
-
-  if (useAlreadyExsists.password != password) {
-    return res.status(400).json({ error: "Password is incorrect" });
-  }
-
-  const userId = useAlreadyExsists._id;
-
-  // await generateOtp();
-  const otp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
-  // const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
-
-  // const otpEntry = new OTP({
-  //     otp,
-  //     userId: userId,
-  //     expiresAt,
-  //   });
-  //   await otpEntry.save();
-  console.log("otp at this point",otp);
-  req.session.userId = userId;
-  req.session.userName = userName;
-  storeotp({ req: req, otp: otp });
-
-  await sendMail({ userName: userName, otp: otp });
-  res.status(200).json({ message: "OTP sent to your email." });
 };
 const UpdatePassword = async (req, res) => {
   const userId = req.session.userId;
-  console.log(userId);
+  console.log("User ID from session:", userId);
+  
   const { password } = req.body;
 
+  // Check if password is provided
   if (!password) {
     return res.status(400).json({ error: "Password is required" });
   }
 
   try {
+    // Find user and update password
     const user = await User.findByIdAndUpdate(userId, { password }, { new: true });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "User not found. Please try again." });
     }
 
+    // Success message
     return res.status(200).json({ message: "Password updated successfully" });
+    
   } catch (error) {
     console.error("Error updating password:", error);
-    return res.status(500).json({ error: "An error occurred while updating the password" });
+    return res.status(500).json({ error: "An internal error occurred while updating the password. Please try again later." });
   }
-};const GoogleSignIn = async (req, res) => {
+};
+const GoogleSignIn = async (req, res) => {
   const { email, firstName, lastName } = req.body;
+
   try {
     if (!email || !firstName || !lastName) {
-      return res.status(400).json({ error: "Please send all the details" });
+      return res.status(400).json({ error: "All fields (email, firstName, lastName) are required" });
     }
 
     const password = "Signed in through Google";
@@ -113,27 +159,29 @@ const UpdatePassword = async (req, res) => {
         password,
       });
       userId = user._id;
+      console.log("New user created with ID:", userId);
     } else {
       userId = userAlreadyExists._id;
+      console.log("User already exists with ID:", userId);
     }
 
     const token = jwt.sign({ userId }, JWT_SECRET);
 
     res.cookie("token", token, {
       httpOnly: false,
-      // sameSite: 'None',
-      maxAge: new Date(Date.now() + 7200000), // 2 hours
-      // secure: true, // Set to false if testing locally without HTTPS
+      maxAge: 2 * 60 * 60 * 1000, // 2 hours
     });
 
     res.setHeader('Authorization', `Bearer ${token}`);
-    sendWelcomeMail({ email: email });
 
-    return res.status(200).json({ message: "User created" });
+    sendWelcomeMail({ email });
+
+    return res.status(200).json({ message: "User signed in successfully" });
 
   } catch (error) {
-    console.log("An error occurred while signing in ", error);
-    return res.status(500).json({ error: "An error occurred while signing in through Google" });
+    console.error("Error during Google sign-in:", error);
+    return res.status(500).json({ error: "An error occurred while signing in through Google. Please try again later." });
   }
 };
+
 export { SignUp, SignIn,UpdatePassword,GoogleSignIn };

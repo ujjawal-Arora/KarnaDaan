@@ -1,10 +1,34 @@
 import { createSlice } from '@reduxjs/toolkit';
-import Cookies from 'js-cookie';
 
-// const token = ;
-// console.log(token)
+import Cookies from 'js-cookie';
+const getUserFromLocalStorage = () => {
+  const user = localStorage.getItem('user');
+  return user ? JSON.parse(user) : {
+    _id: "",
+    name: "",
+    email: "",
+    profile_pic: "",
+  };
+};
+const getLocationFromLocalStorage = () => {
+  const user = localStorage.getItem('user');
+  
+  const parsedUser = user ? JSON.parse(user) : {};
+
+  return {
+    location: parsedUser.location || "",
+    category: parsedUser.category || "",
+  };
+}
+
+
 const initialState = {
   isLoggedIn: Cookies.get('token')!=null?true:false, // initial state
+  ...getUserFromLocalStorage(),
+  ...getLocationFromLocalStorage(),
+  socketConnections:null,
+  onlineUser:[],
+
 };
 
 const authSlice = createSlice({
@@ -16,10 +40,33 @@ const authSlice = createSlice({
     },
     logout:(state)=>{
        state.isLoggedIn = false;
-    }
+       state._id = "";
+      state.name = "";
+      state.email = "";
+      state.profile_pic = "";
+       localStorage.removeItem('user');
+       localStorage.removeItem('item');
+       state. socketConnections=null
+
+    }, 
+    setUser:(state,action)=>{
+      state._id=action.payload._id;
+      state.name=action.payload.name;
+      state.email=action.payload.email;
+      state.profile_pic=action.payload.profile_pic;
+   },
+  setSearch:(state,action)=>{
+     state.location=action.payload.location;
+     state.category=action.payload.category;
+  },
+  setSocketConnections:(state,action)=>{
+    state.socketConnections = action.payload
+},
+setOnlineUser:(state,action)=>{
+  state.onlineUser = action.payload
+},
     },
   });
-  
   export const authActions = authSlice.actions;
   export const authstate=(state)=>state.auth.isLoggedIn;
   export default authSlice.reducer;

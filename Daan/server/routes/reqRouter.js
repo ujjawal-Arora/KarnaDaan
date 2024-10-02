@@ -11,7 +11,6 @@ router.delete("/delete-req/:reqId",authenticate,deleteReq);
 
 router.put("/update-req/:reqId",authenticate,updateReq);
 
-
 router.get("/get-allusers-accepted-req",authenticate,getAllUsersAcceptedReq);
 
 router.get("/get-allusers-non-accepted-req",authenticate,getAllUsersNonAcceptedReq);

@@ -5,9 +5,17 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      scrollbar: {
+        thin: {
+          size: '2px', // Adjust the size here
+        },
+      },
+    },
   },
   
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'), // Ensure compatibility mode is off
+  ],
   
 }
