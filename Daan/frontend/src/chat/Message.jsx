@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { FaAngleLeft } from "react-icons/fa6";
 import { HiDotsVertical } from "react-icons/hi";
 import { FaImage, FaVideo, FaPlus } from "react-icons/fa6";
@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import Avatar from '../Components/Avator';
 import { Link, useParams } from 'react-router-dom';
 import img from '/img.jpg';
+import moment from 'moment';
 
 function Message() {
   const params = useParams();
@@ -35,10 +36,10 @@ function Message() {
       });
 
       socketConnection.on('message', (data) => {
-        setAllMessage(data.messages);
-      });
+        console.log("message-page vdvcdcdc", data)
+        setAllMessage(Array.isArray(data) ? data : [])  });
     }
-  }, [socketConnection, params?.userId, user]);
+  }, [socketConnection, params?.userId,user]);
 
   const handleOnChange = (e) => {
     setMessage(e.target.value);
@@ -52,14 +53,21 @@ function Message() {
       socketConnection.emit('new-message',{
         sender:user?._id,
         receiver:params.userId,
-        text:message.text,
+        text:message,
         msgByUserId:user?._id
 
       })
     }
     setMessage(""); 
   };
+  const currentMessage = useRef(null)
 
+  useEffect(()=>{
+    if(currentMessage.current){
+        currentMessage.current.scrollIntoView({behavior : 'smooth', block : 'end'})
+    }
+},[allMessage])
+console.log("All messages",allMessage)
   return (
     <div className='flex flex-col text-white'>
       {/* Header */}
@@ -93,11 +101,19 @@ function Message() {
       </header>
 
       {/* Mid Part */}
-      <div className='flex-grow h-[calc(98vh-154px)] text-black overflow-y-auto custom-scrollbar bg-slate-200 bg-opacity-50'>
-        <h1>hello</h1>
-        <div className='text-black'></div>
+      <div className='flex-grow h-[calc(98vh-154px)] text-black overflow-y-auto custom-scrollbar bg-slate-200 bg-opacity-50 p-4' ref={currentMessage}>
+      {
+                      allMessage.map((msg,index)=>{
+                        return(
+                          <div className={` p-1 py-1 rounded w-fit max-w-[280px] md:max-w-sm lg:max-w-md ${user._id === msg?.msgByUserId ? "ml-auto bg-teal-100" : "bg-white"}`}>
+                          
+                            <p className='px-2'>{msg.text}</p>
+                            <p className='text-xs ml-auto w-fit'>{moment(msg.createdAt).format('hh:mm')}</p>
+                          </div>
+                        )
+                      })
+                    }
       </div>
-
       {/* Bottom Part */}
       <section className='sticky bottom-0 mr-1 h-[64px] bg-zinc-800 flex items-center px-4'>
         <div className='relative'>

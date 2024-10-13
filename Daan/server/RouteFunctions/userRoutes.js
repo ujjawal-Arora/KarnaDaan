@@ -66,7 +66,7 @@ const SignIn = async (req, res) => {
       return res.status(400).json({ error: "Fill all the details"});
     }
     const result = SigninSchema.safeParse(body);
-    if (!result.success) {
+    if (!result.success) {``
       // Extract and return only the error messages
       const errorMessage = result.error.errors.map(err => err.message).join(', ');
       return res.status(400).json({
@@ -173,10 +173,13 @@ const GoogleSignIn = async (req, res) => {
     });
 
     res.setHeader('Authorization', `Bearer ${token}`);
-
+    const user = await User.findOne({ userName: email });
     sendWelcomeMail({ email });
 
-    return res.status(200).json({ message: "User signed in successfully" });
+    return res.status(200).json({
+      user:user,
+       message: "User signed in successfully"
+       });
 
   } catch (error) {
     console.error("Error during Google sign-in:", error);

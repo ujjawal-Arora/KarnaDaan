@@ -8,12 +8,13 @@ import { jwtDecode } from "jwt-decode";
 import toast from 'react-hot-toast';
 import LoadingAnimation from '../../assets/loading.json';
 import { IoClose } from "react-icons/io5";
-
+import { useDispatch } from "react-redux";
 import Lottie from 'lottie-react';
 import uploadFile from "../../Helper/upload";
-
+import { authActions } from "../../redux/Slice/slice";
 function SignUp() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -60,12 +61,25 @@ function SignUp() {
         firstName: credentialDecoded.given_name,
         lastName: credentialDecoded.family_name,
       }, { withCredentials: true });
-
+      const userData = response.data.user;
+      console.log("resp",response)
       if (response.status === 200) {
+        dispatch(authActions.setUser({
+          _id: userData._id,
+          name: userData.firstName,
+          email: userData.userName,
+        }));
+        localStorage.setItem('user', JSON.stringify({
+          _id: userData._id,
+          name: userData.firstName,
+          email: userData.userName,
+          profile_pic: "",
+        }));
         toast.success(response.data.message);
         navigate("/");
       }
-    } catch (error) {
+    } catch (err) {
+      console.log(err)
       if (err.response) {
         toast.error(err.response.data.error || "An error occurred during sign-up");
       } else {

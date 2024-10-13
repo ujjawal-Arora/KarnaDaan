@@ -15,7 +15,7 @@ function Sidebar() {
   const [openSearchUser, setOpenSearchUser] = useState(false);
   return (
     <div className='w-full  h-full grid grid-cols-[48px,1fr] bg-slate-50 '>
-       <div className=' bg-white w-12 z-50 h-screen rounded-tr-lg rounded-br-lg py-5 text-slate-600 flex flex-col justify-between'>
+       <div className=' bg-white w-12 h-[97vh] z-50  rounded-tr-lg rounded-br-lg py-5 text-slate-600 flex flex-col justify-between'>
                 <div>
                     <NavLink className={({isActive})=>`w-12 h-12 text-slate-900 flex justify-center items-center  cursor-pointer hover:bg-gray-800 rounded ${isActive && " border border-gray-600"}`} title='chat'>
                         <IoChatbubbleEllipses

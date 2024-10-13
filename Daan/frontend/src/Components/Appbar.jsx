@@ -16,25 +16,32 @@ function Appbar() {
   const [showAppbar, setShowAppbar] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-   const user=useSelector(state=>state.auth);
-   console.log("red-user",user)
+  const [user, setUser] = useState(null);  // User state
+  const [loading, setLoading] = useState(true);  // Loading state to wait for user data
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));  
+    }
+    setLoading(false); 
+  }, []);
+
   useEffect(() => {
     // Trigger animation on component mount
     setShowAppbar(true);
   }, []);
 
-
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
-
-
 
   const handleLogout = () => {
     dispatch(authActions.logout()); // Perform logout
     localStorage.removeItem('user'); // Clear local storage
     Cookies.remove('token');
     toast.success('Successfully logged out');
+    setUser(null);  // Clear the user state
   };
 
   const appbarStyle = {
@@ -53,6 +60,7 @@ function Appbar() {
     opacity: showAppbar ? 1 : 0,
     transition: 'transform 0.9s ease-out, opacity 0.5s ease-out',
   };
+
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -68,6 +76,10 @@ function Appbar() {
     };
   }, [dropdownRef]);
 
+  if (loading) {
+    // Prevent rendering until loading completes
+    return null;
+  }
 
   return (
     <div style={appbarStyle} className="bg-zinc-800">
@@ -86,49 +98,48 @@ function Appbar() {
           <Notifications />
         </div>
 
-        <div className=" hover:border-2 rounded-lg">
+        <div className="hover:border-2 rounded-lg">
           <button
             onClick={() => {
               if (!isLoggedIn) {
-                // dispatch(authActions.logout());
-                // Cookies.remove('token');
-                // toast.success('Successfully logged out');
                 navigate('/signup');
                 window.location.reload();
-              } 
+              }
             }}
-            className=" p-1 px-2 pb-1 rounded-lg text-white font-bold"
+            className="p-1 px-2 pb-1 rounded-lg text-white font-bold"
           >
             {isLoggedIn ? (
-         <div className="relative inline-block text-left" ref={dropdownRef}>
-         <div className="flex items-center gap-5 cursor-pointer" onClick={toggleDropdown}>
-           <div className="rounded-full mb-4 h-8 w-8">
-             <Avator name={user.name} imageUrl={user.profile_pic} width={40} height={40} />
-           </div>
-           <IoIosArrowDown className={`transition-transform mt-5 text-xl duration-300 ${isOpen ? 'rotate-180' : ''}`} />
-         </div>
-         {isOpen && (
-           <div className="absolute right-0 mt-2 w-48 bg-zinc-800 border border-gray-300 rounded-lg shadow-lg">
-             <ul className="list-none p-2 m-0">
-               <li className="hover:bg-zinc-700 p-2 border-b cursor-pointer rounded-lg" onClick={() => navigate('/your-donations')}>
-                 Your Donations
-               </li>
-               <li className="hover:bg-zinc-700 p-2 border-b cursor-pointer rounded-lg" onClick={() => navigate('/your-requests')}>
-                 Your Requests
-               </li>
-               <li className="hover:bg-zinc-700 border-b p-2 cursor-pointer rounded-lg" onClick={() => navigate('/your-funds')}>
-                 Your Funds
-               </li>
-               <li className="hover:bg-zinc-700 border-b p-2 cursor-pointer rounded-lg" onClick={() => navigate('/wishlist')}>
-                 WishListe
-               </li>
-               <li className="hover:bg-zinc-700 border-b p-2 cursor-pointer rounded-lg" onClick={handleLogout}>
-                 Logout
-               </li>
-             </ul>
-           </div>
-         )}
-       </div>
+              <div className="relative inline-block text-left" ref={dropdownRef}>
+                <div className="flex items-center gap-5 cursor-pointer" onClick={toggleDropdown}>
+                  <div className="rounded-full mb-4 h-8 w-8">
+                    {user && (
+                      <Avator name={user.name} imageUrl={user.profile_pic} width={40} height={40} />
+                    )}
+                  </div>
+                  <IoIosArrowDown className={`transition-transform mt-5 text-xl duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                </div>
+                {isOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-zinc-800 border border-gray-300 rounded-lg shadow-lg">
+                    <ul className="list-none p-2 m-0">
+                      <li className="hover:bg-zinc-700 p-2 border-b cursor-pointer rounded-lg" onClick={() => navigate('/your-donations')}>
+                        Your Donations
+                      </li>
+                      <li className="hover:bg-zinc-700 p-2 border-b cursor-pointer rounded-lg" onClick={() => navigate('/your-requests')}>
+                        Your Requests
+                      </li>
+                      <li className="hover:bg-zinc-700 border-b p-2 cursor-pointer rounded-lg" onClick={() => navigate('/your-funds')}>
+                        Your Funds
+                      </li>
+                      <li className="hover:bg-zinc-700 border-b p-2 cursor-pointer rounded-lg" onClick={() => navigate('/wishlist')}>
+                        Wishlist
+                      </li>
+                      <li className="hover:bg-zinc-700 border-b p-2 cursor-pointer rounded-lg" onClick={handleLogout}>
+                        Logout
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
             ) : (
               <p className="text-2xl">Login</p>
             )}
