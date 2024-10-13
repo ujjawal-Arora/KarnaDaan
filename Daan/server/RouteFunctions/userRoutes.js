@@ -1,8 +1,8 @@
 import { SignUpSchema, SigninSchema } from "../Zod/zod.js";
 import User from "../models/userModel.js";
-import storeotp from "../Session/storeOtp.js";
 import sendMail from '../Controller/sendOtpMail.js';
 import jwt from 'jsonwebtoken';
+import OTP from '../models/otpModel.js'
 
 import { sendWelcomeMail } from '../Controller/sendWelcomeMail.js';
 const {JWT_SECRET}=process.env;
@@ -59,6 +59,7 @@ const SignIn = async (req, res) => {
   try {
     const body = req.body;
 
+    console.log("body")
 
     // Validate the body using Zod 
     const { userName, password } = body;
@@ -89,22 +90,22 @@ const SignIn = async (req, res) => {
 
     const userId = userAlreadyExists._id;
 
-    // Generate a 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000);
     console.log("Generated OTP:", otp);
 
-    // Store the user session and OTP
-    req.session.userId = userId;
-    req.session.userName = userName;
-    storeotp({ req, otp });
-
-    // Send the OTP via email
+ 
+    const newOtp = new OTP({
+      userId,
+      otp,
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000) 
+    });
+    await newOtp.save();
+    
     await sendMail({ userName, otp });
 
     return res.status(200).json({ message: "OTP sent to your email." });
 
   } catch (error) {
-    // Catch and log any unexpected errors
     console.error("Error during SignIn process:", error);
     return res.status(500).json({
       message: "Internal server error",

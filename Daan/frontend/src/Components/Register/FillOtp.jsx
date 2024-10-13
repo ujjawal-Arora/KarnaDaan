@@ -3,15 +3,18 @@ import OtpCard from './OtpCard';
 import { FaArrowLeft } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch,useSelector } from'react-redux';
 import { authActions } from '../../redux/Slice/slice.js';
 import Lottie from 'lottie-react'
+
 import LoadingAnimation from '../../assets/loading.json'
 
 function FillOtp({istrue}) {
   const dispatch=useDispatch();
+  const location = useLocation();
+  const { userName } = location.state || {};
   const [loading, setLoading] = useState(false);
 
   const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn)
@@ -32,7 +35,7 @@ function FillOtp({istrue}) {
         setLoading(true);
 
         try{
-              const response =await axios.post('http://localhost:3000/api/v1/otp/verify-token-otp',{otp:otp},{ withCredentials: true });
+              const response =await axios.post('http://localhost:3000/api/v1/otp/verify-token-otp',{otp:otp,userName:userName},{ withCredentials: true });
               console.log("response",response);
               const userData = response.data.user;
               
@@ -86,7 +89,7 @@ function FillOtp({istrue}) {
 
     const resendOtp = async () => {
       try {
-          const response = await axios.post('http://localhost:3000/api/v1/otp/resend-otp', {}, { withCredentials: true });
+          const response = await axios.post('http://localhost:3000/api/v1/otp/resend-otp', {userName:userName}, { withCredentials: true });
           console.log("Resent OTP:", response.data.otp);
           toast.success(response.data.message);
 

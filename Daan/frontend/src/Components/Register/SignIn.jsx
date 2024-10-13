@@ -40,7 +40,7 @@ function SignIn() {
       if(response.status === 200){
         toast.success(response.data.message);
         setTimeout(() =>{
-          navigate('/enter-otp');
+          navigate('/enter-otp', { state: { userName: email } });
         },2000)
       }
     } catch (err) {
@@ -59,7 +59,9 @@ function SignIn() {
       const credentialDecoded = jwtDecode(credentialResponse.credential);
 
       const response = await axios.post(
-        "http://localhost:3000/api/v1/user/google-signin",
+        // "https://karnadaan.onrender.com/api/v1/user/google-signin",
+                "http://localhost:3000/api/v1/user/google-signin",
+
         {
           email: credentialDecoded.email,
           firstName: credentialDecoded.given_name,
