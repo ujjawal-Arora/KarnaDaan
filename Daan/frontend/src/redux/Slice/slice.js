@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import Cookies from 'js-cookie';
 const getUserFromLocalStorage = () => {
   const user = localStorage.getItem('user');
   return user ? JSON.parse(user) : {
@@ -23,7 +22,7 @@ const getLocationFromLocalStorage = () => {
 
 
 const initialState = {
-  isLoggedIn: Cookies.get('token')!=null?true:false, // initial state
+  isLoggedIn: localStorage.getItem('token')!=null?true:false, // initial state
   ...getUserFromLocalStorage(),
   ...getLocationFromLocalStorage(),
   socketConnections:null,
@@ -45,7 +44,9 @@ const authSlice = createSlice({
       state.email = "";
       state.profile_pic = "";
        localStorage.removeItem('user');
-       localStorage.removeItem('item');
+       localStorage.removeItem('item');      
+        localStorage.removeItem('token');
+
        state. socketConnections=null
 
     }, 

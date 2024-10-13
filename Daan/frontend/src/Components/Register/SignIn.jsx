@@ -32,7 +32,7 @@ function SignIn() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/user/signin', 
+      const response = await axios.post('https://karnadaan.onrender.com/api/v1/user/signin', 
         { userName: email, password: password }, 
         { withCredentials: true } // Ensure cookies are sent
       );
@@ -59,8 +59,8 @@ function SignIn() {
       const credentialDecoded = jwtDecode(credentialResponse.credential);
 
       const response = await axios.post(
-        // "https://karnadaan.onrender.com/api/v1/user/google-signin",
-                "http://localhost:3000/api/v1/user/google-signin",
+        "https://karnadaan.onrender.com/api/v1/user/google-signin",
+                // "http://localhost:3000/api/v1/user/google-signin",
 
         {
           email: credentialDecoded.email,

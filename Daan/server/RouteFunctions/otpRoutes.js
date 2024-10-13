@@ -30,10 +30,10 @@ const verifyOtpWithToken = async (req, res) => {
 
     await OTP.deleteOne({ _id: otpRecord._id });
 
-    res.cookie("token", token, {
-      httpOnly: false,
-      expires: new Date(Date.now() + 7200000), // 2 hours
-    });
+    // res.cookie("token", token, {
+    //   httpOnly: false,
+    //   expires: new Date(Date.now() + 7200000), // 2 hours
+    // });
 
     res.setHeader('Authorization', `Bearer ${token}`);
 
