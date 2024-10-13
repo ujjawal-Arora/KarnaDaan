@@ -16,7 +16,7 @@ const FrontCards = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/api/v1/search/item', {location:user.location,category:user.category},{ withCredentials: true });
+        const response = await axios.post('https://karnadaan.onrender.com/api/v1/search/item', {location:user.location,category:user.category},{ withCredentials: true });
         console.log("response At post ",response)
         if(response.data.success){
         const postsWithIds = response.data.data.map((post, index) => ({

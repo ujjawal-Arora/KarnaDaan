@@ -38,29 +38,27 @@ function Donates() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result); // Update state with the Data URL of the selected image
+        setImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
   const handleImageUrls = async () => {
     try {
-      // Create an array of promises for each image upload
       const uploadPromises = images.map((img) => {
         if (img) {
-          return uploadFile(img); // Upload the actual image
+          return uploadFile(img); 
         } else {
-          return Promise.resolve(null); // If no image, resolve with null
+          return Promise.resolve(null); 
         }
       });
   
       // Wait for all the promises to resolve
       const uploadedData = await Promise.all(uploadPromises);
   
-      // Extract URLs from the upload response
       const uploadedUrls = uploadedData
-        .filter(data => data !== null) // Remove null values
-        .map(data => data.secure_url); // Extract secure_url from each response
+        .filter(data => data !== null) 
+        .map(data => data.secure_url); 
   
       return uploadedUrls; // Return only URLs
     } catch (error) {
@@ -78,7 +76,7 @@ function Donates() {
    //Wait for URLs to be populated
    console.log(urls)
       const response = await axios.post(
-        'http://localhost:3000/api/v1/posts/add-post',
+        'https://karnadaan.onrender.com/api/v1/posts/add-post',
         {
           title,
           category,
