@@ -2,20 +2,20 @@ import User from "../models/userModel.js";
 import {Post} from '../models/postModel.js';
 
 const addPost = async(req,res)=>{
-const {title,description,imageUrls,location,name,phoneNumber,wishListed,donated,category}=req.body;
+const {email,title,description,imageUrls,location,name,phoneNumber,wishListed,donated,category}=req.body;
 console.log("images url",imageUrls);
 console.log("images url only")
 imageUrls.map((i)=>{
     console.log(typeof i)
 })
-
+if (!email) {
+    return res.status(404).json({ error: "Pls login " });
+}
 if(!title||!description||!location||!name||!phoneNumber||!category){
     return res.status(400).json({error:"please fill all the fields"});
 }
 
-const userId=req.user.userId;
-
-const user = await User.findById(userId);
+const user = await User.findOne({ userName: email });
 
 if (!user) {
     return res.status(404).json({ error: "User not found" });
@@ -30,9 +30,7 @@ const newPost = new Post({
     phoneNumber,
     wishListed,
     donated,
-    user: userId,  
-
-
+    user: user._id,  
 });
 
 try {

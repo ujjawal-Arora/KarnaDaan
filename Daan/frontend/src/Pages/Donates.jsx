@@ -5,9 +5,12 @@ import { Link,useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import uploadFile from "../Helper/upload";
 import axios from "axios";
+import {useDispatch,useSelector } from 'react-redux';
+
 
 function Donates() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [wishListed, setWishlisted] = useState(false);
@@ -67,8 +70,8 @@ function Donates() {
       return [];
     }
   };
-  
-  
+  const user=useSelector((state) => state.auth);
+  console.log("user  at donate",user.email);
   
   const HandleSubmit = async () => {
     try {
@@ -77,6 +80,8 @@ function Donates() {
    console.log(urls)
       const response = await axios.post(
         'https://karnadaan.onrender.com/api/v1/posts/add-post',
+        // 'http://localhost:3000/api/v1/posts/add-post',
+
         {
           title,
           category,
@@ -87,6 +92,7 @@ function Donates() {
           donated,
           name,
           phoneNumber,
+          email:user.email,
         },
         { withCredentials: true }
       );
