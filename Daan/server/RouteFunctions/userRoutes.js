@@ -144,7 +144,7 @@ const GoogleSignIn = async (req, res) => {
   const { email, firstName, lastName } = req.body;
 
   try {
-    if (!email || !firstName || !lastName) {
+    if (!email || !firstName) {
       return res.status(400).json({ error: "All fields (email, firstName, lastName) are required" });
     }
 
@@ -156,7 +156,7 @@ const GoogleSignIn = async (req, res) => {
       const user = await User.create({
         userName: email,
         firstName,
-        lastName,
+        lastName: lastName || "N/A", // Provide a default value if lastName is missing
         password,
       });
       userId = user._id;
@@ -178,14 +178,16 @@ const GoogleSignIn = async (req, res) => {
     sendWelcomeMail({ email });
 
     return res.status(200).json({
-      user:user,
-       message: "User signed in successfully"
-       });
+      user: user,
+      token: token,
+      message: "User signed in successfully"
+    });
 
   } catch (error) {
     console.error("Error during Google sign-in:", error);
     return res.status(500).json({ error: "An error occurred while signing in through Google. Please try again later." });
   }
 };
+
 
 export { SignUp, SignIn,UpdatePassword,GoogleSignIn };

@@ -4,7 +4,7 @@ import { PiUserCircle } from "react-icons/pi";
 import {useSelector} from 'react-redux'
 const Avator = ({userId,name,imageUrl,width,height,keys}) => {
     // const isOnline = true;
-    const isOnline = useSelector(state => state.auth?.onlineUser);
+    const isOnline = useSelector(state => state.auth?.online);
 
       let avatarName=" "
     if(name){

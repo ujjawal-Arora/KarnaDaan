@@ -1,8 +1,9 @@
 import express from 'express';
-import { searchFun  } from '../RouteFunctions/chatRoutes.js';
+import { searchFun,searchForSide  } from '../RouteFunctions/chatRoutes.js';
 const router = express.Router();
 
 router.use('/search',searchFun)
+router.use('/searchSideBar',searchForSide);
 
 
 export default router;

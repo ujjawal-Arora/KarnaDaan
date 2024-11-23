@@ -13,7 +13,7 @@ function Home() {
   useEffect(()=>{
     const socketConnection=io('http://localhost:3000',{
       auth:{
-        token:Cookies.get('token')
+        token:localStorage.getItem('token'),
       }
     })
 

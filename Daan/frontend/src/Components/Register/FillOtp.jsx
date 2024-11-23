@@ -35,7 +35,7 @@ function FillOtp({istrue}) {
         setLoading(true);
 
         try{
-              const response =await axios.post('https://karnadaan.onrender.com/api/v1/otp/verify-token-otp',{otp:otp,userName:userName},{ withCredentials: true });
+              const response =await axios.post('http://localhost:3000/api/v1/otp/verify-token-otp',{otp:otp,userName:userName},{ withCredentials: true });
               console.log("response",response);
               const userData = response.data.user;
               
@@ -54,7 +54,6 @@ function FillOtp({istrue}) {
               if(response.data.token){
                 toast.success(response.data.message);
                 localStorage.setItem('token',response.data.token);
-
               }
               dispatch(authActions.login());
              

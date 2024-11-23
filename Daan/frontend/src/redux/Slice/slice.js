@@ -26,6 +26,7 @@ const initialState = {
   ...getUserFromLocalStorage(),
   ...getLocationFromLocalStorage(),
   socketConnections:null,
+  online: localStorage.getItem('online')!=null?true:false, // initial state
   onlineUser:[],
 
 };
@@ -66,6 +67,7 @@ const authSlice = createSlice({
 setOnlineUser:(state,action)=>{
   state.onlineUser = action.payload
 },
+
     },
   });
   export const authActions = authSlice.actions;

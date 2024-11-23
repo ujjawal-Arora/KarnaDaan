@@ -9,6 +9,7 @@ const MainCard = () => {
   const location = useLocation();
   const navigate = useNavigate(); // Initialize the useNavigate hook
   const data = location.state;
+  console.log("dataAt main card ma ",data)
 
   if (!data || !data.imageUrls) {
     return <p className="text-center text-red-500 font-semibold">Card not found</p>;
@@ -20,6 +21,9 @@ const MainCard = () => {
   const handleNextClick = () => {
     setSelectedImageIndex((prevIndex) => (prevIndex + 1) % cardData.length);
   };
+  const HandelDonorClick=()=>{
+      navigate(`/chat/${data.user}`)
+  }
 
   const handlePrevClick = () => {
     setSelectedImageIndex((prevIndex) => (prevIndex - 1 + cardData.length) % cardData.length);
@@ -86,7 +90,7 @@ const MainCard = () => {
           <div className='shadow-xl mt-10'>
             <MapComponent lat={latitude} lng={longitude} />
           </div>
-          <div className='shadow-lg  hover:bg-zinc-700 items-center rounded-lg bg-zinc-800 text-white font-bold p-3 mt-7'>
+          <div onClick={HandelDonorClick} className='shadow-lg  hover:bg-zinc-700 items-center rounded-lg bg-zinc-800 text-white font-bold p-3 mt-7'>
             <div className='flex items-center justify-between'>
               <div className='flex gap-4 items-center'>
                 <div className="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-200">

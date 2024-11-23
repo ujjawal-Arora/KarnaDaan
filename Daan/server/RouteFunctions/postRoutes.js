@@ -56,7 +56,7 @@ const getAllPosts=async(req, res) => {
                 return res.status(404).json({ error: "User not found" });
             }
     
-            return res.status(200).json({ posts: user.posts });
+            return res.status(200).json({ posts: user.posts,user:user });
         } catch (error) {
             console.error("Error retrieving posts:", error);
             return res.status(500).json({ error: "An error occurred while retrieving posts" });

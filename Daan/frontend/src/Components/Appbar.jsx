@@ -21,12 +21,18 @@ function Appbar() {
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
+    console.log("storedUser", storedUser);
     if (storedUser) {
       setUser(JSON.parse(storedUser));  
+      dispatch(authActions.login()); 
+    } else {
+      setUser(null);
     }
-    setLoading(false); 
-  }, []);
-
+    setLoading(false);
+  }, [dispatch]);
+  
+  // console.log("storedUser", storedUser);
+// 
   useEffect(() => {
     // Trigger animation on component mount
     setShowAppbar(true);
@@ -85,7 +91,7 @@ function Appbar() {
     <div style={appbarStyle} className="bg-zinc-800">
       <div className="text-4xl font-bold">
         <h1 className="text-orange-500">
-          कर्ण <span className="text-4xl text-white">Daan</span>
+          कर्ण <span className="text-4xl  text-white">Daan</span>
         </h1>
       </div>
 
@@ -155,7 +161,7 @@ function Appbar() {
                 toast.error('Login to Continue');
               }
             }}
-            className="bg-orange-600 hover:bg-orange-500 h-11 w-24 p-1 rounded-lg text-white text-xl font-bold"
+            className="bg-orange-600  hover:bg-orange-500 h-11 w-24 p-1 rounded-lg text-white text-xl font-bold"
           >
             Donate
           </button>
@@ -170,7 +176,8 @@ function Appbar() {
                 toast.error('Login to Continue');
               }
             }}
-            className="bg-orange-600 hover:bg-orange-500 h-11 w-24 p-2 rounded-lg text-white text-xl font-bold"
+            style={{ fontFamily: 'Roboto, sans-serif' }}
+            className="bg-orange-600 font-sans hover:bg-orange-500 h-11 w-24 p-2 rounded-lg text-white text-xl font-bold"
           >
             Request
           </button>

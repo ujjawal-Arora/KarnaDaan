@@ -79,8 +79,8 @@ function Donates() {
    //Wait for URLs to be populated
    console.log(urls)
       const response = await axios.post(
-        'https://karnadaan.onrender.com/api/v1/posts/add-post',
-        // 'http://localhost:3000/api/v1/posts/add-post',
+        // 'https://karnadaan.onrender.com/api/v1/posts/add-post',
+        'http://localhost:3000/api/v1/posts/add-post',
 
         {
           title,

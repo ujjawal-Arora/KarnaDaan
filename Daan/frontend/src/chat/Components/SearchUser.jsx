@@ -19,7 +19,7 @@ function SearchUser({onClose}) {
                  search:search
             })
             // setLoading(false)
-                    console.log(response.data.data)
+                    console.log("at search usr e",response.data.data)
             setSearchUser(response.data.data)
 
         } catch (error) {

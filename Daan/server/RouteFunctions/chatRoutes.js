@@ -22,4 +22,25 @@ const  searchFun=async (req,res)=>{
         return res.status(500).json({ message: "An error occurred while searching posts" });
       }
 }
-export {searchFun};
+const searchForSide = async (req, res) => {
+  try {
+    const { search, data } = req.body;
+console.log(data)
+    const query = new RegExp(search, "i");
+
+    const filteredUsers = data.filter((user) => 
+      query.test(user.userName) || query.test(user.firstName)
+    );
+
+    return res.json({
+      message: 'Filtered users',
+      data: filteredUsers,
+      success: true
+    });
+  } catch (err) {
+    console.error("Error filtering users:", err);
+    return res.status(500).json({ message: "An error occurred while filtering users" });
+  }
+};
+
+export {searchFun,searchForSide};

@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 export default {
   content: [
     "./index.html",
@@ -10,6 +12,9 @@ export default {
         thin: {
           size: '2px', // Adjust the size here
         },
+      },
+      fontFamily: {
+        sans: ['Roboto', ...defaultTheme.fontFamily.sans],
       },
     },
   },

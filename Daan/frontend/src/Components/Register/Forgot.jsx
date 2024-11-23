@@ -18,7 +18,7 @@ export default function Forgot() {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/otp/send-otp', { userName:email },{withCredentials:true});
+      const response = await axios.post('https://karnadaan.onrender.com/api/v1/otp/send-otp', { userName:email },{withCredentials:true});
       console.log(response.data);
       if (response.status == 200) {
         alert("OTP sent successfully to your email.");

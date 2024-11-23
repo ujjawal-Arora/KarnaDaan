@@ -15,7 +15,9 @@ function FillOtpForget() {
     const handleSubmit =  async() => {
         console.log("OTP submitted:", otp);
         try{
-              const response =await axios.post('http://localhost:3000/api/v1/otp/verify-otp',{otp:otp},{ withCredentials: true });
+              const response =await axios.post(
+                // 'https://karnadaan.onrender.com/api/v1/otp/verify-otp'
+                "http://localhost:3000/api/v1/otp/verify-otp",{otp:otp},{ withCredentials: true });
               console.log(response);
               if(response.status==200){
                 navigate('/update-password');
@@ -39,7 +41,7 @@ function FillOtpForget() {
 
     const resendOtp = async () => {
       try {
-          const response = await axios.post('http://localhost:3000/api/v1/otp/resend-otp',{}, { withCredentials: true });
+          const response = await axios.post('https://karnadaan.onrender.com/api/v1/otp/resend-otp',{}, { withCredentials: true });
           console.log("Resent OTP:", response.data.otp);
           setTimeLeft(300); // Reset the timer to 5 minutes
           setResend(true); 

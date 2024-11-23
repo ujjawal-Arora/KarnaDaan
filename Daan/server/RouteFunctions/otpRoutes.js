@@ -18,11 +18,13 @@ const verifyOtpWithToken = async (req, res) => {
     }
 
     const user = await User.findOne({ userName });
+    console.log(user);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
     const userId = user._id;
     const otpRecord = await OTP.findOne({ userId }).sort({ createdAt: -1 });
+    console.log(otpRecord,otpRecord.otp,otp);
     if (!otpRecord || otpRecord.otp !== otp) {
       return res.status(401).json({ error: "Invalid OTP" });
     }

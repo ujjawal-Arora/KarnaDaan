@@ -10,6 +10,9 @@ const FrontCard = ({
   btntext,
   link,
   wishlist,
+  userId
+  
+
 }) => {
   const [isWishlisted, setIsWishlisted] = useState(wishlist);
 

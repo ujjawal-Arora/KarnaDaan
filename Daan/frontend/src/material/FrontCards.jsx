@@ -16,9 +16,10 @@ const FrontCards = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.post('https://karnadaan.onrender.com/api/v1/search/item', {location:user.location,category:user.category},{ withCredentials: true });
-        console.log("response At post ",response)
+        const response = await axios.post('http://localhost:3000/api/v1/search/item', {location:user.location,category:user.category},{ withCredentials: true });
+        console.log("response At post ",response.data.data)
         if(response.data.success){
+          console.log("datatAt frontecs",response.data.data)
         const postsWithIds = response.data.data.map((post, index) => ({
           ...post,
           sequentialId: index + 1, // Assign sequential ID starting from 1
@@ -39,21 +40,22 @@ const FrontCards = () => {
     getData();
   }, [user]);
 
-  const handleCardClick = (sequentialId, card) => {
+  const handleCardClick = (sequentialId, card,userId) => {
     if (isLoggedIn) {
-      navigate(`/maincard/${sequentialId}`, { state: card });
+      navigate(`/maincard/${sequentialId}`, { state: card ,userId});
       window.location.reload(); // Refresh the page
     } else {
       toast.error('Login to Continue');
     }
   };
+  console.log("dataSet At data",dataSet)
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center bg-gray-200 p-4">
       <div className="w-full flex flex-wrap justify-center items-center gap-10 mt-4">
         {dataSet.length > 0 ? (
           dataSet.map((card) => (
-            <div key={card.sequentialId} onClick={() => handleCardClick(card.sequentialId, card)}>
+            <div key={card.sequentialId} onClick={() => handleCardClick(card.sequentialId, card,card.user)}>
               <FrontCard
                 imgSrc={card.imageUrls[0]} // Assuming images is an array
                 imgAlt={card.title}
@@ -61,6 +63,7 @@ const FrontCards = () => {
                 description={card.description}
                 btntext="Learn More"
                 wishlist={card.wishlist}
+                userId={card.user}
               />
             </div>
           ))

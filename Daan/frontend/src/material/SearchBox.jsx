@@ -70,7 +70,7 @@ const SearchBox = () => {
   const fetchCityFromLatLng = async (lat, lng) => {
     try {
       const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyB8M0ICKS8zNxJxJD42Xq_yAkaZBc5EJAM`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}AIzaSyD3bpFODUSagdkfLKk-_ZKH5kNY8GLSfyE`
       );
 
       if (response.data.status === "OK") {
@@ -103,7 +103,7 @@ const SearchBox = () => {
   return (
     <div className="flex gap-2 ">
       <LoadScript
-        googleMapsApiKey="AIzaSyB8M0ICKS8zNxJxJD42Xq_yAkaZBc5EJAM"
+        googleMapsApiKey="AIzaSyD3bpFODUSagdkfLKk-_ZKH5kNY8GLSfyE"
         libraries={libraries}
       >
         <Autocomplete onLoad={handleLoad} onPlaceChanged={handlePlaceChanged}>
@@ -147,3 +147,5 @@ const SearchBox = () => {
 };
 
 export default SearchBox;
+// 143433288925-d07ap40m8g2tpq060i7bghtoe5hu5ovl.apps.googleusercontent.com
+// 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
