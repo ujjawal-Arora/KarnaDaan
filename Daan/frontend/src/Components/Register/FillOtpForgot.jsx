@@ -60,7 +60,7 @@ function FillOtpForget() {
       
         {/* Top Section with Back Arrow */}
         <div className='p-4'>
-          <Link to="/"> 
+          <Link to="/home"> 
             <FaArrowLeft className='text-2xl text-gray-600' />
           </Link>
         </div>

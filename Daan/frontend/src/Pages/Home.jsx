@@ -7,9 +7,9 @@ function Home() {
         <div>
             <Appbar/>
         </div>
+
         <div className='pt-20'>
            <FrontCards/>
-
         </div>
       
     </div>

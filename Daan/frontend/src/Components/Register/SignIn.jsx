@@ -96,7 +96,7 @@ function SignIn() {
           localStorage.setItem("token", response.data.token);
         }
         toast.success(response.data.message);
-        navigate("/");
+        navigate("/home");
       }
     } catch (err) {
       console.log(err);

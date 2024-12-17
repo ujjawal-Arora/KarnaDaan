@@ -60,7 +60,7 @@ function FillOtp({istrue}) {
           
                console.log(isLoggedIn)
               setTimeout(() =>{
-                navigate('/');
+                navigate('/home');
               },3000)
 
         }catch(err){
@@ -116,7 +116,7 @@ function FillOtp({istrue}) {
       
         {/* Top Section with Back Arrow */}
         <div className='p-4'>
-          <Link to="/"> 
+          <Link to="/home"> 
             <FaArrowLeft className='text-2xl text-gray-600' />
           </Link>
         </div>

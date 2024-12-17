@@ -18,7 +18,7 @@ app.use(cors({
 
 
 app.use(express.json());
-connect(); 
+connect(); //mongo db connection
 
 app.use("/api/v1",mainRouter)
 const PORT=3000;

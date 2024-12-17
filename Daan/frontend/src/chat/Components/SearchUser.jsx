@@ -14,11 +14,9 @@ function SearchUser({onClose}) {
 
     const handleSearchUser = async()=>{
         try {
-            // setLoading(true)
             const response = await axios.post("http://localhost:3000/api/v1/chat/search",{
                  search:search
             })
-            // setLoading(false)
                     console.log("at search usr e",response.data.data)
             setSearchUser(response.data.data)
 
@@ -34,7 +32,6 @@ function SearchUser({onClose}) {
   return (
     <div className='fixed top-0 bottom-0 left-0 right-0 bg-slate-700 bg-opacity-40 p-2 z-50'>
     <div className='w-full max-w-lg mx-auto mt-10'>
-        {/**input search user */}
         <div className='bg-white rounded h-14 overflow-hidden flex '>
             <input 
                 type='text'
@@ -48,9 +45,7 @@ function SearchUser({onClose}) {
             </div>
         </div>
 
-        {/**display search user */}
         <div className='bg-white mt-2 w-full p-4 rounded'>
-            {/**no user found */}
             {
                 searchUser.length === 0 && !loading && (
                     <p className='text-center text-slate-500'>no user found!</p>

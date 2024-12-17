@@ -16,14 +16,7 @@ const Avator = ({userId,name,imageUrl,width,height,keys}) => {
         avatarName = splitName[0][0]
       }
     }
-    const bgColor = [
-        'bg-blue-400',
-        'bg-green-400',
-        'bg-orange-400',
-        'bg-yellow-400',
-        "bg-cyan-400",
-        "bg-sky-400",
-      ]
+   
 
   return (
    <div className='relative' >
@@ -39,7 +32,7 @@ const Avator = ({userId,name,imageUrl,width,height,keys}) => {
                 />
             ) : (
                 name ? (
-                    <div  style={{width : width+"px", height : height+"px" }} className={`overflow-hidden rounded-full flex justify-center items-center text-xl ${bgColor[keys%6]} text-white`}>
+                    <div  style={{width : width+"px", height : height+"px" }} className={`overflow-hidden rounded-full flex justify-center items-center text-2xl bg-zinc-700 text-white`}>
                         {avatarName}
                     </div>
                 ) :(

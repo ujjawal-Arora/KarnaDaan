@@ -1,0 +1,77 @@
+.preloader {
+  height: 100vh;
+  width: 100%;
+  background: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed; /* Covers the viewport */
+  top: 0;
+  left: 0;
+  z-index: 9999; /* Keeps it above other content */
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease-out, visibility 0.5s ease-out; /* Smooth fade-out */
+  pointer-events: none; /* Prevent interaction */
+}
+
+.preloader.hidden {
+  opacity: 0;
+  visibility: hidden; /* Completely hides it */
+}
+
+.image-container {
+  margin-bottom: 20px;
+}
+
+.preloader-image {
+  width: 120px;
+  height: auto;
+  animation: zoomIn 2s infinite alternate; /* Zoom animation for logo */
+}
+
+.texts-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  animation: slideUp 1.5s ease-in-out forwards; /* Slide-up text animation */
+}
+
+.texts-container span {
+  margin: 5px 0;
+  opacity: 0; /* Start hidden */
+  animation: fadeInText 1.5s ease-in-out forwards;
+}
+
+.texts-container span:nth-child(1) {
+  animation-delay: 0.3s;
+}
+
+.texts-container span:nth-child(2) {
+  animation-delay: 0.6s;
+}
+
+.texts-container span:nth-child(3) {
+  animation-delay: 0.9s;
+}
+
+/* Animations */
+@keyframes fadeInText {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(50px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes zoomIn {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
+}

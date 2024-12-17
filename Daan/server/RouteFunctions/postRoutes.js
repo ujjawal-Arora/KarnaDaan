@@ -3,8 +3,7 @@ import {Post} from '../models/postModel.js';
 
 const addPost = async(req,res)=>{
 const {email,title,description,imageUrls,location,name,phoneNumber,wishListed,donated,category}=req.body;
-console.log("images url",imageUrls);
-console.log("images url only")
+
 imageUrls.map((i)=>{
     console.log(typeof i)
 })
@@ -50,13 +49,13 @@ return res.status(200).json({message:"post added successfully"})
 const getAllPosts=async(req, res) => {
           const userId=req.user.userId;
           try {
-            const user = await User.findById(userId).populate('posts');//what does populate means is thar first u get findBYid u get user and array of posts with id populate will return all the posts of the user 
+            const user = await User.findById(userId).populate('posts');
     
             if (!user) {
                 return res.status(404).json({ error: "User not found" });
             }
     
-            return res.status(200).json({ posts: user.posts,user:user });
+            return res.status(200).json({ posts: user.posts });
         } catch (error) {
             console.error("Error retrieving posts:", error);
             return res.status(500).json({ error: "An error occurred while retrieving posts" });
@@ -67,7 +66,7 @@ const deletePost = async (req, res) => {
    
     try {
       const { postId } = req.params;
-      const userId = req.user.userId;
+      const userId = req.userId;
       const checkPost = await Post.findById(postId);
       if (!checkPost) {
         return res.status(404).json({ message: "Post not found" });
@@ -86,8 +85,7 @@ const deletePost = async (req, res) => {
     try{
         const {postId} = req.params;
         const {title,description,imageUrls,location,name,phoneNumber,wishListed,donated}=req.body;
-
-        if(!title||!description||!imageUrls||!location||!name||!phoneNumber||!wishListed||!donated){
+        if(!title||!description||!location||!name||!phoneNumber){
             return res.status(400).json({error:"please fill all the fields"});
         }
         const check_post=await Post.findById(postId);
@@ -127,54 +125,48 @@ const getAllUsersDonatedPosts = async (req, res) => {
         return res.status(500).json({ message: "An error occurred while getting all non-donated posts" });
     }
 };
+const getAllwishListedPosts = async (req, res) => {
+  try {
 
-  const getAllwishListedPosts=async (req,res)=>{
-    try{
-        const userId=req.user.userId;
+    const wishListedPosts = await Post.find({
+      wishListed: true,
+    }).sort({ createdAt: -1 }); 
 
-        const userData=await User.findById(userId).populate({
-            path:"posts",
-            match:{wishListed:true},
-            options:{sort:{createdAt:-1}}
-        });//populate for getting whole daata
-
-        const wishListed=userData.posts;
-        res.status(200).json({data:wishListed});
-
-  }catch(error){
-       console.log(error);
-       return res.status(500).json({message: "An error occurred while getting all wish lists"});
+    return res.status(200).json({ data: wishListedPosts });
+  } catch (error) {
+    console.error("Error fetching wishlisted posts:", error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred while fetching wishlisted posts" });
   }
-}
-  
-  const getAlldonatedPosts=async (req,res)=>{
- try{
-        const userId=req.user.userId;
-        
-        const userData=await User.findById(userId).populate({
-            path:"posts",
-            match:{donated:true},
-            options:{sort:{createdAt:-1}}
-        });//populate for getting whole daata
+};
 
-        const wishListed=userData.posts;
-        res.status(200).json({data:wishListed});
+const getAlldonatedPosts = async (req, res) => {
+  try {
 
-  }catch(error){
-       console.log(error);
-       return res.status(500).json({message: "An error occurred while getting all donated lists"});
+    const donatedPost  = await Post.find({
+      donated: true,
+    }).sort({ createdAt: -1 }); 
+
+    return res.status(200).json({ data: donatedPost });
+  } catch (error) {
+    console.error("Error fetching wishlisted posts:", error);
+    return res
+      .status(500)
+      .json({ message: "An error occurred while fetching wishlisted posts" });
   }
-  }
+};
+
 
   const getAllnonWishPosts=async (req,res)=>{
     try{
-           const userId=req.user.userId;
+           const userId=req.userId;
            
            const userData=await User.findById(userId).populate({
                path:"posts",
                match:{wishListed:false},
                options:{sort:{createdAt:-1}}
-           });//populate for getting whole daata
+           });
    
            const wishListed=userData.posts;
            res.status(200).json({data:wishListed});
@@ -187,13 +179,13 @@ const getAllUsersDonatedPosts = async (req, res) => {
 
      const getAllnonDonatedPosts=async (req,res)=>{
         try{
-               const userId=req.user.userId;
+               const userId=req.userId;
                
                const userData=await User.findById(userId).populate({
                    path:"posts",
                    match:{donated:false},
                    options:{sort:{createdAt:-1}}
-               });//populate for getting whole daata
+               });
        
                const wishListed=userData.posts;
                res.status(200).json({data:wishListed});
@@ -203,9 +195,35 @@ const getAllUsersDonatedPosts = async (req, res) => {
               return res.status(500).json({message: "An error occurred while getting all donated lists"});
          }
          }
+
+         const toggleWishlist = async (req, res) => {
+          const { cardId } = req.params; 
+          const { wishListed } = req.body; 
+        
+          try {
+            const updatedPost = await Post.findByIdAndUpdate(
+              cardId,
+              { wishListed },
+              { new: true } 
+            );
+        
+            if (!updatedPost) {
+              return res.status(404).json({ message: "Post not found" });
+            }
+        
+            return res
+              .status(200)
+              .json({ message: "Wishlist updated successfully", post: updatedPost });
+          } catch (error) {
+            console.error("Error updating wishlist:", error);
+            return res.status(500).json({ message: "Internal server error" });
+          }
+        };
+        
+
     
        
 
    
 
-export  {addPost,getAllPosts,deletePost,updatePost,getAllwishListedPosts,getAlldonatedPosts,getAllnonWishPosts,getAllUsersNonDonatedPosts,getAllUsersDonatedPosts,getAllnonDonatedPosts}
+export  {addPost,getAllPosts,deletePost,updatePost,getAllwishListedPosts,getAlldonatedPosts,getAllnonWishPosts,getAllUsersNonDonatedPosts,getAllUsersDonatedPosts,getAllnonDonatedPosts,toggleWishlist}

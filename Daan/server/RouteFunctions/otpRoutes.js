@@ -5,7 +5,6 @@ import sendMail from '../Controller/sendOtpMail.js';
 import { sendWelcomeMail } from '../Controller/sendWelcomeMail.js';
 import User from '../models/userModel.js';
 
-
 const verifyOtpWithToken = async (req, res) => {
   const { otp, userName } = req.body;  
 
@@ -32,11 +31,7 @@ const verifyOtpWithToken = async (req, res) => {
 
     await OTP.deleteOne({ _id: otpRecord._id });
 
-    // res.cookie("token", token, {
-    //   httpOnly: false,
-    //   expires: new Date(Date.now() + 7200000), // 2 hours
-    // });
-
+  
     res.setHeader('Authorization', `Bearer ${token}`);
 
     sendWelcomeMail({ email: user.userName });
@@ -70,8 +65,8 @@ const resendOtp = async (req, res) => {
 
     const newOtp = Math.floor(100000 + Math.random() * 900000);
   console.log("otp",newOtp)
-    await storeOtp({ userId, otp: newOtp,       expiresAt: new Date(Date.now() + 10 * 60 * 1000) 
-    });
+    // await storeOtp({ userId, otp: newOtp,       expiresAt: new Date(Date.now() + 10 * 60 * 1000) 
+    // });
 
     await sendMail({ userName: user.userName, otp: newOtp });
 

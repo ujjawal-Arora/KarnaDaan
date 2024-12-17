@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { CiCamera } from "react-icons/ci";
 import { FaArrowLeft } from "react-icons/fa6";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import uploadFile from "../Helper/upload";
 import axios from "axios";
-import {useDispatch,useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { ClipLoader } from "react-spinners"; // Import the loader component
 
 function Donates() {
   const navigate = useNavigate();
@@ -23,6 +23,8 @@ function Donates() {
   const [location, setLocation] = useState("");
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const handleImageChange = (e, index) => {
     const file = e.target.files[0];
@@ -50,19 +52,19 @@ function Donates() {
     try {
       const uploadPromises = images.map((img) => {
         if (img) {
-          return uploadFile(img); 
+          return uploadFile(img);
         } else {
-          return Promise.resolve(null); 
+          return Promise.resolve(null);
         }
       });
-  
+
       // Wait for all the promises to resolve
       const uploadedData = await Promise.all(uploadPromises);
-  
+
       const uploadedUrls = uploadedData
-        .filter(data => data !== null) 
-        .map(data => data.secure_url); 
-  
+        .filter(data => data !== null)
+        .map(data => data.secure_url);
+
       return uploadedUrls; // Return only URLs
     } catch (error) {
       console.error('Error uploading images:', error);
@@ -70,54 +72,57 @@ function Donates() {
       return [];
     }
   };
-  const user=useSelector((state) => state.auth);
-  console.log("user  at donate",user.email);
-  
+  const user = useSelector((state) => state.auth);
+  console.log("user at donate", user.email);
+
   const HandleSubmit = async () => {
     try {
-      const urls = await handleImageUrls();
-   //Wait for URLs to be populated
-   console.log(urls)
-      const response = await axios.post(
-        // 'https://karnadaan.onrender.com/api/v1/posts/add-post',
-        'http://localhost:3000/api/v1/posts/add-post',
+      setLoading(true); // Set loading to true when starting the submission
 
+      const urls = await handleImageUrls();
+      //Wait for URLs to be populated
+      console.log(urls);
+
+      const response = await axios.post(
+        'http://localhost:3000/api/v1/posts/add-post',
         {
           title,
           category,
           description,
-          imageUrls: urls, 
+          imageUrls: urls,
           location,
           wishListed,
           donated,
           name,
           phoneNumber,
-          email:user.email,
+          email: user.email,
         },
         { withCredentials: true }
       );
-  
+
       console.log("Post added successfully:", response.data);
-      toast.success(' Your Post Posted successfully');
+      toast.success('Your Post Posted successfully');
       setTimeout(() => {
-           navigate('/');
-      },2000)
+        navigate('/home');
+      }, 2000);
     } catch (error) {
       console.error("Error adding post:", error.response ? error.response.data : error.message);
+    } finally {
+      setLoading(false); // Set loading to false when submission is complete
     }
   };
-  
+
   return (
     <div>
-      <div className="bg-orange-50 flex items-center p-3 text-2xl text-gray-500 h-20 ">
+      <div className="bg-orange-50 flex items-center p-3 text-2xl text-gray-500 h-20">
         <div>
-          <Link to="/">
+          <Link to="/home">
             <FaArrowLeft />
           </Link>
         </div>
       </div>
       <div className="container mx-auto p-4">
-      <Toaster position="top-center" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} />
 
         <h1 className="text-3xl font-bold mb-4">Post Your Donation</h1>
         <div className="border p-4 mb-4">
@@ -141,10 +146,10 @@ function Donates() {
               <option value="tools">Tools</option>
               <option value="art">Art Supplies</option>
               <option value="Cycle">Cycle</option>
-
             </select>
           </div>
         </div>
+
         <div className="border p-4 mb-4">
           <h2 className="text-xl font-semibold mb-2">Include Some Details</h2>
           <div className="mb-4">
@@ -169,7 +174,6 @@ function Donates() {
 
         <div className="border p-4 mb-4">
           <h2 className="text-xl font-semibold mb-2">Upload Images</h2>
-
           <div className="flex gap-4">
             {images.map((image, index) => (
               <div
@@ -197,9 +201,7 @@ function Donates() {
                 )}
               </div>
             ))}
-           
           </div>
-          
         </div>
 
         <div className="border p-4 mb-4">
@@ -217,7 +219,6 @@ function Donates() {
 
         <div className="border p-4 mb-4">
           <h2 className="text-xl font-semibold mb-4">Review Your Details</h2>
-
           <div className="flex gap-8 items-center mb-4">
             <div className="relative w-24 h-24 border border-gray-300 rounded-full overflow-hidden bg-gray-100">
               <input
@@ -248,23 +249,32 @@ function Donates() {
               />
             </div>
           </div>
-
-          <div className="mb-4">
-            <label className="block mb-2">Phone Number</label>
-            <input
-              type="text"
-              className="w-full p-2 border rounded"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
+          <div className="flex gap-8 items-center">
+            <div className="w-full">
+              <label className="block mb-2">Phone Number</label>
+              <input
+                type="text"
+                className="w-full p-2 border rounded"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+            </div>
           </div>
         </div>
-        <div className="flex justify-end gap-4">
-          <button onClick={HandleSubmit} className="bg-blue-500 px-5 rounded text-white font-semibold py-2 text-xl">
-            Submit
+
+        <div className="flex justify-end">
+          <button
+            onClick={HandleSubmit}
+            className="bg-orange-600 text-white text-xl font-bold py-3 px-5 rounded-lg flex items-center gap-2"
+            disabled={loading} // Disable the button while loading
+          >
+            {loading ? (
+              <ClipLoader size={26} color="white" /> // Show loader
+            ) : (
+              "Submit"
+            )}
           </button>
-  
-  </div>
+        </div>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import express  from 'express';
 const app= express();
 const router=express.Router();
 import authenticate from '../Controller/Auth.js';
-import {addPost, deletePost,updatePost,getAllwishListedPosts,getAlldonatedPosts,getAllnonWishPosts,getAllUsersNonDonatedPosts,getAllUsersDonatedPosts,getAllnonDonatedPosts} from '../RouteFunctions/postRoutes.js'
+import {addPost, deletePost,updatePost,getAllwishListedPosts,getAlldonatedPosts,getAllnonWishPosts,getAllUsersNonDonatedPosts,getAllUsersDonatedPosts,getAllnonDonatedPosts,toggleWishlist} from '../RouteFunctions/postRoutes.js'
 import {getAllPosts} from '../RouteFunctions/postRoutes.js'
 
 // router.post('/add-post',authenticate,addPost);
@@ -33,14 +33,15 @@ router.delete("/delete-post/:postId",deletePost);
 
 router.put("/update-post/:postId",updatePost);
 
-router.get("/get-allusers-nondonated-posts",getAllUsersNonDonatedPosts);
-router.get("/get-allusers-donated-posts",getAllUsersDonatedPosts);
+router.post("/get-allusers-nondonated-posts",getAllUsersNonDonatedPosts);
+router.post("/get-allusers-donated-posts",getAllUsersDonatedPosts);
 
-router.get("/get-all-wishlisted-posts",getAllwishListedPosts);
-router.get("/get-all-donated-posts",getAlldonatedPosts);
+router.post("/get-all-wishlisted-posts",getAllwishListedPosts);
+router.post("/get-all-donated-posts",getAlldonatedPosts);
 
 router.get("/get-all-nonwishlisted-posts",getAllnonWishPosts);
 
 router.get("/get-all-nondonated-posts",getAllnonDonatedPosts);
+  router.put("/toggle-wishlist/:cardId",toggleWishlist);
 
 export default router;

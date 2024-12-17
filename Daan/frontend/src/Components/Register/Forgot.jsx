@@ -34,7 +34,7 @@ export default function Forgot() {
     <div className='flex bg-slate-50 h-screen flex-col'>
       {/* Top Section with Back Arrow */}
       <div className='p-4'>
-        <Link to="/">
+        <Link to="/home">
           <FaArrowLeft className='text-2xl text-gray-600' />
         </Link>
       </div>

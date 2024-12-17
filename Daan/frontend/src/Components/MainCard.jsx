@@ -34,8 +34,7 @@ const MainCard = () => {
   };
 
   const handleBackClick = () => {
-    navigate('/'); // Navigate back to the previous page
-    window.location.reload(); 
+    navigate('/home'); // Navigate back to the previous page
   };
   
 

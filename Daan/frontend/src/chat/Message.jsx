@@ -68,6 +68,7 @@ function Message() {
   if(dataSet.online){
      localStorage.setItem('online', dataSet.online)
   }
+  console.log("dataset at messAGE",dataSet)
 
   return (
     <div className="flex flex-col text-white">
@@ -78,7 +79,7 @@ function Message() {
             <FaAngleLeft size={25} />
           </Link>
           <div>
-            <Avatar width={50} height={50} imageUrl={dataSet.profile_pic || img} />
+            <Avatar width={50} height={50} imageUrl={dataSet.profile_pic} name={dataSet.firstName} />
           </div>
           <div>
             <h3 className="font-semibold text-white text-xl my-0">

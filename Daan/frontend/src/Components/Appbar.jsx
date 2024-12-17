@@ -7,6 +7,7 @@ import Avator from "./Avator.jsx";
 import { authActions, authstate } from '../redux/Slice/slice.js';
 import toast from 'react-hot-toast';
 import Cookies from 'js-cookie';
+import logo from '../assets/logo.png'
 import { IoIosArrowDown } from "react-icons/io";
 
 function Appbar() {
@@ -34,7 +35,6 @@ function Appbar() {
   // console.log("storedUser", storedUser);
 // 
   useEffect(() => {
-    // Trigger animation on component mount
     setShowAppbar(true);
   }, []);
 
@@ -89,7 +89,11 @@ function Appbar() {
 
   return (
     <div style={appbarStyle} className="bg-zinc-800">
-      <div className="text-4xl font-bold">
+   
+      <div className="text-4xl flex items-center justify-center font-bold">
+      <div className="mb-2" >
+        <img className="w-20" src={logo} alt="" />
+      </div>
         <h1 className="text-orange-500">
           कर्ण <span className="text-4xl  text-white">Daan</span>
         </h1>
@@ -130,12 +134,12 @@ function Appbar() {
                       <li className="hover:bg-zinc-700 p-2 border-b cursor-pointer rounded-lg" onClick={() => navigate('/your-donations')}>
                         Your Donations
                       </li>
-                      <li className="hover:bg-zinc-700 p-2 border-b cursor-pointer rounded-lg" onClick={() => navigate('/your-requests')}>
+                      {/* <li className="hover:bg-zinc-700 p-2 border-b cursor-pointer rounded-lg" onClick={() => navigate('/your-requests')}>
                         Your Requests
-                      </li>
-                      <li className="hover:bg-zinc-700 border-b p-2 cursor-pointer rounded-lg" onClick={() => navigate('/your-funds')}>
+                      </li> */}
+                      {/* <li className="hover:bg-zinc-700 border-b p-2 cursor-pointer rounded-lg" onClick={() => navigate('/your-funds')}>
                         Your Funds
-                      </li>
+                      </li> */}
                       <li className="hover:bg-zinc-700 border-b p-2 cursor-pointer rounded-lg" onClick={() => navigate('/wishlist')}>
                         Wishlist
                       </li>
@@ -147,7 +151,7 @@ function Appbar() {
                 )}
               </div>
             ) : (
-              <p className="text-2xl">Login</p>
+              <p className="text-2xl mt-2">Login</p>
             )}
           </button>
         </div>

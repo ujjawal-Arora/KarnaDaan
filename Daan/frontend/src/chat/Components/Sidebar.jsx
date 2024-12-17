@@ -77,7 +77,8 @@ function Sidebar() {
           <Avatar
             width={40}
             height={40}
-            imageUrl={user.profile_pic || "/img.jpg"}
+            imageUrl={user.profile_pic}
+            name={user.name}
           />
           <button
             title="logout"
@@ -100,7 +101,7 @@ function Sidebar() {
     return (
       <SearchCard
         key={userDetails?._id || user._id}
-        avatar={userDetails?.profile_pic || "/img.jpg"}
+        avatar={userDetails?.profile_pic }
         name={userDetails?.firstName || "Unknown User"}
         message={user?.lastMsg?.text || ""}
         date={
@@ -108,7 +109,6 @@ function Sidebar() {
             ? new Date(user.lastMsg.createdAt).toLocaleDateString()
             : ""
         }
-        // count={user?.unseenMsg || 0}
         userId={userDetails?._id || user._id}
       />
     );
