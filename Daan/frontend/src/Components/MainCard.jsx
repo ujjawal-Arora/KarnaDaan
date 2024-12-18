@@ -7,9 +7,9 @@ import { FaArrowLeft } from "react-icons/fa6";
 
 const MainCard = () => {
   const location = useLocation();
-  const navigate = useNavigate(); // Initialize the useNavigate hook
+  const navigate = useNavigate(); 
   const data = location.state;
-  console.log("dataAt main card ma ",data)
+  console.log("dataAt main card ma ",data._id,data.user,data)
 
   if (!data || !data.imageUrls) {
     return <p className="text-center text-red-500 font-semibold">Card not found</p>;
@@ -34,7 +34,7 @@ const MainCard = () => {
   };
 
   const handleBackClick = () => {
-    navigate('/home'); // Navigate back to the previous page
+    navigate('/home'); 
   };
   
 
@@ -44,7 +44,6 @@ const MainCard = () => {
   return (
    <div className=''>
      <div className="m-20 ">
-      {/* Arrow at the top left for navigating back */}
       <button
         className="absolute top-5 text-gray-700 left-5 p-2  rounded-full"
         onClick={handleBackClick}

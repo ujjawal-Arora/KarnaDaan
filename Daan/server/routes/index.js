@@ -2,6 +2,7 @@ import express from 'express';
 import userRouter from './userRouter.js';
 import postRouter from './postRouter.js';
 import requestRouter from './reqRouter.js';
+import funds from './funds.js';
 import otpRouter from './otpRouter.js';
 import cors from 'cors';
 
@@ -13,6 +14,8 @@ router.use(cors({
     credentials: true, 
   }));
 router.use('/user', userRouter);
+router.use('/funds', funds);
+
 router.use('/posts',postRouter);
 router.use('/requests', requestRouter);
 router.use('/otp', otpRouter);

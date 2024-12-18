@@ -88,7 +88,7 @@ function Appbar() {
   }
 
   return (
-    <div style={appbarStyle} className="bg-zinc-800">
+    <div style={appbarStyle} className="bg-zinc-800 ">
    
       <div className="text-4xl flex items-center justify-center font-bold">
       <div className="mb-2" >
@@ -103,10 +103,10 @@ function Appbar() {
         <SearchBox />
       </div>
 
-      <div className="flex gap-4 justify-around w-60">
-        <div className="mt-2">
+      <div className="flex gap-3 justify-around ">
+        {/* <div className="mt-2">
           <Notifications />
-        </div>
+        </div> */}
 
         <div className="hover:border-2 rounded-lg">
           <button
@@ -151,12 +151,12 @@ function Appbar() {
                 )}
               </div>
             ) : (
-              <p className="text-2xl mt-2">Login</p>
+              <p className="text-2xl">Login</p>
             )}
           </button>
         </div>
 
-        <div className="flex items-center">
+      <div className="flex items-center">
           <button
             onClick={() => {
               if (isLoggedIn) {
@@ -171,7 +171,7 @@ function Appbar() {
           </button>
         </div>
 
-        <div className="flex items-center">
+        <div className="flex overflow-hidden items-center">
           <button
             onClick={() => {
               if (isLoggedIn) {
@@ -186,6 +186,17 @@ function Appbar() {
             Request
           </button>
         </div>
+        <div className="flex items-center">
+          <button onClick={()=>{
+            navigate('/stripe');
+          }}
+         
+            style={{ fontFamily: 'Roboto, sans-serif' }}
+            className="bg-orange-600 font-sans hover:bg-orange-500 h-11 w-24 p-2 rounded-lg text-white text-xl font-bold"
+          >
+            Fund
+          </button>
+      </div>
       </div>
     </div>
   );
