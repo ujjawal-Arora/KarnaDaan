@@ -3,6 +3,9 @@ import { CiCamera } from "react-icons/ci";
 import { FaArrowLeft } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import toast, { Toaster } from 'react-hot-toast';
+import {useDispatch,useSelector } from 'react-redux';
+
 
 function Requests() {
   const [title, setTitle] = useState("");
@@ -17,7 +20,8 @@ function Requests() {
   const [phoneNumber, setPhoneNumber] = useState("");
 
  
-  
+  const user=useSelector((state) => state.auth);
+  console.log("user  at request",user.email);
   
   
   const HandleSubmit = async () => {
@@ -34,11 +38,15 @@ function Requests() {
           accepted,
           name,
           phoneNumber,
+          email: user.email,
+
         },
         { withCredentials: true }
       );
   
       console.log("Req added successfully:", response.data);
+      toast.success('Your Request Posted successfully');
+
     } catch (error) {
       console.error("Error adding post:", error.response ? error.response.data : error.message);
     }
@@ -48,7 +56,7 @@ function Requests() {
     <div>
       <div className="bg-orange-50 flex items-center p-3 text-2xl text-gray-500 h-20 ">
         <div>
-          <Link to="/">
+          <Link to="/home">
             <FaArrowLeft />
           </Link>
         </div>

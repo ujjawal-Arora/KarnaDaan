@@ -1,6 +1,7 @@
 import express from 'express';
-import {searchPosts} from '../RouteFunctions/searchRouter.js';
+import {searchPosts,searchReqPost} from '../RouteFunctions/searchRouter.js';
 const router =express.Router();
 
 router.post('/item',searchPosts);
+router.post('/reqitem',searchReqPost);
 export default router;

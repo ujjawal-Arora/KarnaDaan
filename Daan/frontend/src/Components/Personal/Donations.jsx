@@ -1,4 +1,126 @@
 
+// import React, { useState, useEffect } from 'react';
+// import { useSelector } from 'react-redux'; 
+// import { useNavigate } from 'react-router-dom';
+// import axios from 'axios';
+// import Sidebar_per from './Sidebar_per';
+// import FrontCard from '../FrontCard'; 
+// import toast, { Toaster } from 'react-hot-toast';
+// import 'react-confirm-alert/src/react-confirm-alert.css';
+
+
+// export default function Wishlist() {
+//   const navigate = useNavigate();
+//   const [data, setData] = useState([]);
+//   const [card,setCardId]=useState([]);
+//   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn); 
+  
+//   const userId = useSelector((state) => state.auth._id);
+//   console.log("user id at posts"+userId);
+  
+//   useEffect(() => {
+//     const getData = async () => {
+//       try {
+//         const response = await axios.post('http://localhost:3000/api/v1/posts/get-all-donated-posts', 
+//          { userId },
+//           {withCredentials: true,}
+//         );
+//         console.log("response",response);
+//         setData(response.data.data);
+
+//         const postIds = response.data.data.map((post) => post._id);
+//         setCardId(postIds);
+//         console.log("response at personal ",postIds);
+//       } catch (error) {
+//         console.log(error)
+//         console.error(error);
+//       }
+//     };
+
+//     if (userId) {
+//       getData();
+//     }
+//   }, [userId]);
+
+
+//   //  const handleCardUpdate = (updatedCard, sequentialId) => {
+//   //   const updatedDataSet = dataSet.map((card) => {
+//   //     if (card.sequentialId === sequentialId) {
+//   //       return { ...card, ...updatedCard };
+//   //     }
+//   //     return card;
+//   //   });
+
+//   //   setData(updatedDataSet);
+//   //   setFilteredCards(updatedDataSet);
+//   // };
+
+
+
+//   const handleCardClick = (sequentialId, card) => {
+//     if (isLoggedIn) {
+//       navigate(`/maincard/${sequentialId}`, { state: { ...card, from: 'donations' } });
+//       window.location.reload(); 
+//     } else {
+//       toast.error('Login to Continue');
+//     }
+//   };
+  
+ 
+  
+//   // const handleDeleteCard = (cardId) => {
+//   //   const updatedData = data.filter((card) => card._id !== cardId);
+//   //   setData(updatedData);
+//   // };
+  
+  
+
+//   return (
+//     <div className="flex min-h-screen bg-zinc-100 text-zinc-800">
+
+//       <Sidebar_per />
+
+//       <div className="w-[75vw] text-zinc-800 flex flex-col border">
+//         <div className="p-0 h-[10vh] flex items-center justify-center bg-zinc-800 border-b border-zinc-300">
+//         <h1 className="font-semibold text-orange-600 text-3xl md:text-5xl lg:text-5xl">
+//         Your Donations
+//           </h1>
+//         </div>
+        
+//         <div className="flex-grow overflow-y-auto p-4">
+//           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5 max-h-[70vh] overflow-y-scroll">
+//             {data && data.length > 0 ? (
+//               data.map((card, index) => (
+//                 <div key={card.sequentialId} onClick={() => handleCardClick(card.sequentialId, card)}>
+//                 <FrontCard
+//                   key={index}
+//                   imgSrc={card.imageUrls[0]} 
+//                   imgAlt={card.title}
+//                   title={card.title}
+//                   description={card.description}
+//                   btntext="Learn More"
+//                   // wishlist={card.wishlist}
+//                   // onUpdateCard={(updatedCard) => handleCardUpdate(updatedCard, card.sequentialId)}
+//                   // onDeleteCard={handleDeleteCard} 
+//                   // isFromDonation={true}
+//                   cardId={card._id}
+//                   locationInput={card.location}
+//                   name={card.name}
+//                   phoneNumber={card.phoneNumber}
+//                   />
+//                  </div>
+//               ))
+//             ) : (
+//               <p>No items in donations</p>
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux'; 
 import { useNavigate } from 'react-router-dom';
@@ -6,33 +128,24 @@ import axios from 'axios';
 import Sidebar_per from './Sidebar_per';
 import FrontCard from '../FrontCard'; 
 import toast, { Toaster } from 'react-hot-toast';
-import 'react-confirm-alert/src/react-confirm-alert.css';
-
 
 export default function Wishlist() {
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
-  const [card,setCardId]=useState([]);
+  const [data, setData] = useState([]); // state for storing posts
+  const [view, setView] = useState('donated'); // state for toggling between donated and non-donated posts
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn); 
-  
   const userId = useSelector((state) => state.auth._id);
-  console.log("user id at posts"+userId);
   
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/api/v1/posts/get-all-donated-posts', 
-         { userId },
-          {withCredentials: true,}
-        );
-        console.log("response",response);
-        setData(response.data.data);
+        const url = view === 'donated'
+          ? 'http://localhost:3000/api/v1/posts/get-all-donated-posts'
+          : 'http://localhost:3000/api/v1/posts/get-allusers-nondonated-posts';
 
-        const postIds = response.data.data.map((post) => post._id);
-        setCardId(postIds);
-        console.log("response at personal ",postIds);
+        const response = await axios.post(url, { userId }, { withCredentials: true });
+        setData(response.data.data);
       } catch (error) {
-        console.log(error)
         console.error(error);
       }
     };
@@ -40,22 +153,7 @@ export default function Wishlist() {
     if (userId) {
       getData();
     }
-  }, [userId]);
-
-
-   const handleCardUpdate = (updatedCard, sequentialId) => {
-    const updatedDataSet = dataSet.map((card) => {
-      if (card.sequentialId === sequentialId) {
-        return { ...card, ...updatedCard };
-      }
-      return card;
-    });
-
-    setData(updatedDataSet);
-    setFilteredCards(updatedDataSet);
-  };
-
-
+  }, [userId, view]);
 
   const handleCardClick = (sequentialId, card) => {
     if (isLoggedIn) {
@@ -65,53 +163,71 @@ export default function Wishlist() {
       toast.error('Login to Continue');
     }
   };
-  
- 
-  
+
+  const handleEditCard = (cardId) => {
+    console.log("Edit card with ID:", cardId);
+    // Implement edit functionality
+  };
+
   const handleDeleteCard = (cardId) => {
+    console.log("Delete card with ID:", cardId);
     const updatedData = data.filter((card) => card._id !== cardId);
     setData(updatedData);
   };
-  
-  
 
   return (
     <div className="flex min-h-screen bg-zinc-100 text-zinc-800">
-
       <Sidebar_per />
-
       <div className="w-[75vw] text-zinc-800 flex flex-col border">
         <div className="p-0 h-[10vh] flex items-center justify-center bg-zinc-800 border-b border-zinc-300">
-        <h1 className="font-semibold text-orange-600 text-3xl md:text-5xl lg:text-5xl">
-        Your Donations
+          <h1 className="font-semibold text-orange-600 text-3xl md:text-5xl lg:text-5xl">
+            Your Donations
           </h1>
         </div>
-        
+
+        {/* <div className="flex justify-center mt-4">
+          <button
+            onClick={() => setView('donated')}
+            className="bg-blue-600 text-white p-2 rounded-lg m-2"
+          >
+            Donated Posts
+          </button>
+          <button
+            onClick={() => setView('non-donated')}
+            className="bg-gray-600 text-white p-2 rounded-lg m-2"
+          >
+            Non-Donated Posts
+          </button>
+        </div> */}
+
         <div className="flex-grow overflow-y-auto p-4">
           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5 max-h-[70vh] overflow-y-scroll">
             {data && data.length > 0 ? (
-              data.map((card, index) => (
-                <div key={card.sequentialId} onClick={() => handleCardClick(card.sequentialId, card)}>
-                <FrontCard
-                  key={index}
-                  imgSrc={card.imageUrls[0]} 
-                  imgAlt={card.title}
-                  title={card.title}
-                  description={card.description}
-                  btntext="Learn More"
-                  wishlist={card.wishlist}
-                  onUpdateCard={(updatedCard) => handleCardUpdate(updatedCard, card.sequentialId)}
-                  onDeleteCard={handleDeleteCard} 
-                  isFromDonation={true}
-                  cardId={card._id}
-                  locationInput={card.location}
-                  name={card.name}
-                  phoneNumber={card.phoneNumber}
+              data.map((card) => (
+                <div key={card._id} onClick={() => handleCardClick(card._id, card)}>
+                  <FrontCard
+                    imgSrc={card.imageUrls[0]}
+                    imgAlt={card.title}
+                    title={
+                      <div className="truncate w-full font-semibold text-gray-800">
+                        {card.title}
+                      </div>
+                    }
+                    description={
+                      <div className="line-clamp-2 text-gray-600">
+                        {card.description}
+                      </div>
+                    }
+                    btntext="More Details"
+                    wishlist={card.wishListed}
+                    cardId={card._id}
+                    isFromDonation={false}
+                    alreadyDonated={false}
                   />
-                 </div>
+                </div>
               ))
             ) : (
-              <p>No items in donations</p>
+              <p>No items available</p>
             )}
           </div>
         </div>

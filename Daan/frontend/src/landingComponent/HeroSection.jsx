@@ -10,6 +10,10 @@ const HeroSection = () => {
     navigate('/home'); // Navigate to the /home route
   };
 
+  const handleRequestClick = () => {
+    navigate('/home'); // Navigate to the /home route
+  };
+
   return (
     <div className="flex flex-col items-center mt-6 lg:mt-20">
       <h1 className="text-4xl sm:text-6xl lg:text-7xl text-center tracking-wide">
@@ -33,7 +37,7 @@ const HeroSection = () => {
         >
           Donate
         </div>
-        <div className="py-3 px-4 mx-3 rounded-md border cursor-pointer">
+        <div className="py-3 px-4 mx-3 rounded-md border cursor-pointer" onClick={handleRequestClick}>
           Request
         </div>
       </div>

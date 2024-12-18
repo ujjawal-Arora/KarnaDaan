@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar_per from './Sidebar_per';
-import ReqCard from '../ReqCard'; 
+import FrontCard from '../FrontCard'; 
 import toast, { Toaster } from 'react-hot-toast';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
@@ -16,12 +16,12 @@ export default function Wishlist() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn); 
   
   const userId = useSelector((state) => state.auth._id);
-  console.log("user id at requests"+userId);
+  console.log("user id at posts"+userId);
   
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/api/v1/requests/get-allusers-non-accepted-req', 
+        const response = await axios.post('http://localhost:3000/api/v1/posts/get-allusers-nondonated-posts', 
          { userId },
           {withCredentials: true,}
         );
@@ -59,7 +59,7 @@ export default function Wishlist() {
 
   const handleCardClick = (sequentialId, card) => {
     if (isLoggedIn) {
-      navigate(`/mainReqCard/${sequentialId}`, { state: { ...card, from: 'requests' } });
+      navigate(`/maincard/${sequentialId}`, { state: { ...card, from: 'donations' } });
       window.location.reload(); 
     } else {
       toast.error('Login to Continue');
@@ -83,7 +83,7 @@ export default function Wishlist() {
       <div className="w-[75vw] text-zinc-800 flex flex-col border">
         <div className="p-0 h-[10vh] flex items-center justify-center bg-zinc-800 border-b border-zinc-300">
         <h1 className="font-semibold text-orange-600 text-3xl md:text-5xl lg:text-5xl">
-        Your Requests
+        Your Posts
           </h1>
         </div>
         
@@ -92,20 +92,29 @@ export default function Wishlist() {
             {data && data.length > 0 ? (
               data.map((card, index) => (
                 <div key={card.sequentialId} onClick={() => handleCardClick(card.sequentialId, card)}>
-                <ReqCard
-                // imgAlt={card.title}
-                isMine={true}
-                title={card.title}
-                description={card.description}
-                btntext="More Details"
-                cardId={card._id}
-                onUpdateCard={(updatedCard) => handleCardUpdate(updatedCard, card.sequentialId)}
-                onDeleteCard={handleDeleteCard} 
-              />
+                <FrontCard
+                  key={index}
+                  imgSrc={card.imageUrls[0]} 
+                  imgAlt={card.title}
+                  title={card.title}
+                  description={card.description}
+                  btntext="Learn More"
+                //   wishlist={card.wishlist}
+                  onUpdateCard={(updatedCard) => handleCardUpdate(updatedCard, card.sequentialId)}
+                  onDeleteCard={handleDeleteCard} 
+                  isFromDonation={true}
+                  cardId={card._id}
+                  locationInput={card.location}
+                  name={card.name}
+                  phoneNumber={card.phoneNumber}
+                  onDonate={true}
+                  alreadyDonated={true}
+
+                  />
                  </div>
               ))
             ) : (
-              <p>No items in requests</p>
+              <p>No items in donations</p>
             )}
           </div>
         </div>

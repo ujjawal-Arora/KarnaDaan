@@ -15,7 +15,6 @@ function Donates() {
   const [category, setCategory] = useState("");
   const [wishListed, setWishlisted] = useState(false);
   const [donated, setDonated] = useState(false);
-
   const [description, setDescription] = useState("");
   const [images, setImages] = useState([null, null, null, null, null]);
   const [image, setImage] = useState(null);

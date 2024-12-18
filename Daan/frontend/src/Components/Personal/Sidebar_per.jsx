@@ -38,12 +38,17 @@ function Sidebar_per() {
             Your Donations
           </button>
         </Link>
+        <Link to="/your-posts">
+          <button className="w-40 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-700 shadow-md">
+            Your Posts
+          </button>
+        </Link>
         {/* <Link to="/your-requests"> */}
-        <div>
+        <Link to="/your-requests">
           <button className="w-40 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-700 shadow-md">
             Your Requests
           </button>
-          </div>    
+        </Link>  
               <Link to="/wishlist">
           <button className="w-40 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-700 shadow-md">
             Your Wishlist

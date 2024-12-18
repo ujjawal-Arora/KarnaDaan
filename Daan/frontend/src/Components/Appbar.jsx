@@ -119,7 +119,7 @@ function Appbar() {
             className="p-1 px-2 pb-1 rounded-lg text-white font-bold"
           >
             {isLoggedIn ? (
-              <div className="relative inline-block text-left" ref={dropdownRef}>
+              <div className="relative z-50 inline-block text-left" ref={dropdownRef}>
                 <div className="flex items-center gap-5 cursor-pointer" onClick={toggleDropdown}>
                   <div className="rounded-full mb-4 h-8 w-8">
                     {user && (
@@ -133,6 +133,12 @@ function Appbar() {
                     <ul className="list-none p-2 m-0">
                       <li className="hover:bg-zinc-700 p-2 border-b cursor-pointer rounded-lg" onClick={() => navigate('/your-donations')}>
                         Your Donations
+                      </li>
+                      <li className="hover:bg-zinc-700 p-2 border-b cursor-pointer rounded-lg" onClick={() => navigate('/your-posts')}>
+                        Your Posts
+                      </li>
+                      <li className="hover:bg-zinc-700 p-2 border-b cursor-pointer rounded-lg" onClick={() => navigate('/your-requests')}>
+                        Your Requests
                       </li>
                       {/* <li className="hover:bg-zinc-700 p-2 border-b cursor-pointer rounded-lg" onClick={() => navigate('/your-requests')}>
                         Your Requests

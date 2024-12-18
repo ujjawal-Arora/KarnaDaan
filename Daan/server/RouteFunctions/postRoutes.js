@@ -222,8 +222,28 @@ const getAlldonatedPosts = async (req, res) => {
         
 
     
-       
-
+        const DonateDone = async (req, res) => {
+          console.log("vksdvbsdhsd ksd kf sdkf ")
+          try {
+            const { postId } = req.params;
+            const userId = req.userId;
+        
+            const checkPost = await Post.findById(postId);
+        
+            if (!checkPost) {
+              return res.status(404).json({ message: "Post not found" });
+            }
+        
+            checkPost.donated = true;
+            await checkPost.save();
+        
+            res.status(200).json({ message: "Post marked as donated successfully", post: checkPost });
+          } catch (err) {
+            console.error("Error updating post:", err);
+            res.status(500).json({ message: "An error occurred while updating the post" });
+          }
+        };
+        
    
 
-export  {addPost,getAllPosts,deletePost,updatePost,getAllwishListedPosts,getAlldonatedPosts,getAllnonWishPosts,getAllUsersNonDonatedPosts,getAllUsersDonatedPosts,getAllnonDonatedPosts,toggleWishlist}
+export  {addPost,DonateDone,getAllPosts,deletePost,updatePost,getAllwishListedPosts,getAlldonatedPosts,getAllnonWishPosts,getAllUsersNonDonatedPosts,getAllUsersDonatedPosts,getAllnonDonatedPosts,toggleWishlist}

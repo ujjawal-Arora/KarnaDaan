@@ -1,86 +1,68 @@
 
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import FrontCard from '../Components/FrontCard';
+import ReqCard from '../Components/ReqCard';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 
-const FrontCards = () => {
+const Reqcards = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const user = useSelector((state) => state.auth);
-  console.log("at front", user, user.location)
-  const [dataSet, setData] = useState([]); // All cards data
+  const [dataSet, setData] = useState([]);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/api/v1/search/item', { location: user.location, category: user.category }, { withCredentials: true });
-        console.log("response At post ", response)
+        const response = await axios.post(
+          'http://localhost:3000/api/v1/search/reqitem',
+          { location: user.location, category: user.category },
+          { withCredentials: true }
+        );
+        console.log("response At req post ",response)
         if (response.data.success) {
           const postsWithIds = response.data.data.map((post, index) => ({
             ...post,
             sequentialId: index + 1,
           }));
-
           setData(postsWithIds);
-
         } else {
           toast.error('No results found in your location');
           setData([]);
-
         }
-        // Store all posts
       } catch (error) {
-        console.log(error);
+        console.error('API Error:', error);
+        toast.error('Failed to fetch requested cards');
       }
     };
+
     getData();
   }, [user]);
 
   const handleCardClick = (sequentialId, card) => {
     if (isLoggedIn) {
-      navigate(`/maincard/${sequentialId}`, { state: card });
-      window.location.reload(); // Refresh the page
+      navigate(`/mainReqCard/${sequentialId}`, { state: card });
+      window.location.reload();
     } else {
       toast.error('Login to Continue');
     }
   };
 
-
-
   return (
-    <div className="h-screen w-full flex flex-col mt-4 items-center bg-gray-200 p-4">
+    <div className="min-h-screen w-full flex flex-col items-center bg-gray-200 p-4">
       <div className="w-full flex flex-wrap justify-center items-center gap-10 mt-4">
         {dataSet.length > 0 ? (
           dataSet.map((card) => (
             <div key={card.sequentialId} onClick={() => handleCardClick(card.sequentialId, card)}>
-              <FrontCard
-                imgSrc={card.imageUrls[0]}
-                imgAlt={card.title}
-                title={
-                  <div className="truncate w-48 font-semibold text-gray-800">
-                    {card.title}
-                  </div>
-                }
-                description={
-                  <div className="line-clamp-2 w-48 text-gray-600">
-                    {card.description}
-                  </div>
-                }
+              <ReqCard
+                // imgAlt={card.title}
+                title={card.title}
+                description={card.description}
                 btntext="More Details"
-                wishlist={card.wishListed}
                 cardId={dataSet[card.sequentialId - 1]._id}
-                isFromDonation={false}
-                onDonate={false}
-                alreadyDonated={true}
-
-                // ={true}
-
               />
-
             </div>
           ))
         ) : (
@@ -91,6 +73,4 @@ const FrontCards = () => {
   );
 };
 
-export default FrontCards;
-
-
+export default Reqcards;

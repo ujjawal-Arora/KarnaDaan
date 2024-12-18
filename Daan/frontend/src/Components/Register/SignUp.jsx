@@ -257,9 +257,9 @@ function SignUp() {
                     Remember for 30 days
                   </label>
                 </div>
-                <button className="font-medium text-base text-orange-400">
+                {/* <button className="font-medium text-base text-orange-400">
                   <Link to="/forgot">Forgot password</Link>
-                </button>
+                </button> */}
               </div>
               <div className="mt-4 flex flex-col gap-y-4">
                 <button

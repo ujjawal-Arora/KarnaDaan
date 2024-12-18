@@ -2,7 +2,7 @@ import express  from 'express';
 const app= express();
 const router=express.Router();
 import authenticate from '../Controller/Auth.js';
-import {addPost, deletePost,updatePost,getAllwishListedPosts,getAlldonatedPosts,getAllnonWishPosts,getAllUsersNonDonatedPosts,getAllUsersDonatedPosts,getAllnonDonatedPosts,toggleWishlist} from '../RouteFunctions/postRoutes.js'
+import {addPost,DonateDone, deletePost,updatePost,getAllwishListedPosts,getAlldonatedPosts,getAllnonWishPosts,getAllUsersNonDonatedPosts,getAllUsersDonatedPosts,getAllnonDonatedPosts,toggleWishlist} from '../RouteFunctions/postRoutes.js'
 import {getAllPosts} from '../RouteFunctions/postRoutes.js'
 
 // router.post('/add-post',authenticate,addPost);
@@ -43,5 +43,9 @@ router.get("/get-all-nonwishlisted-posts",getAllnonWishPosts);
 
 router.get("/get-all-nondonated-posts",getAllnonDonatedPosts);
   router.put("/toggle-wishlist/:cardId",toggleWishlist);
+
+  router.post("/donate-done/:postId",DonateDone);
+
+  
 
 export default router;

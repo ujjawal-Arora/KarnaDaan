@@ -56,10 +56,20 @@ export default function Wishlist() {
                   <FrontCard
                     imgSrc={card.imageUrls[0]} // Assuming imageUrls is an array
                     imgAlt={card.title}
-                    title={card.title}
-                    description={card.description}
+                    title={
+                      <div className="truncate w-full font-semibold text-gray-800">
+                        {card.title}
+                      </div>
+                    }
+                    description={
+                      <div className="line-clamp-2 text-gray-600">
+                        {card.description}
+                      </div>
+                    }
                     btntext="More Details"
                     wishlist={card.wishListed}
+                    alreadyDonated={true}
+
                     fromWish={true}
                   />
                 </div>

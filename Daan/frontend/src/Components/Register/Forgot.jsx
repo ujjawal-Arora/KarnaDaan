@@ -16,25 +16,31 @@ export default function Forgot() {
       alert("Please enter your email.");
       return;
     }
-
+  
+    // Simple email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email.");
+      return;
+    }
+  
     try {
-      const response = await axios.post('https://karnadaan.onrender.com/api/v1/otp/send-otp', { userName:email },{withCredentials:true});
-      console.log(response.data);
-      if (response.status == 200) {
+      const response = await axios.post('https://karnadaan.onrender.com/api/v1/otp/send-otp', { userName: email }, { withCredentials: true });
+      if (response.status === 200) {
         alert("OTP sent successfully to your email.");
+        navigate('/enter-forget-otp');
       }
-      navigate('/enter-forget-otp');
     } catch (error) {
       console.error("Error sending OTP:", error);
       alert("Failed to send OTP. Please try again.");
     }
   };
-
+  
   return (
     <div className='flex bg-slate-50 h-screen flex-col'>
       {/* Top Section with Back Arrow */}
       <div className='p-4'>
-        <Link to="/home">
+        <Link to="/signin">
           <FaArrowLeft className='text-2xl text-gray-600' />
         </Link>
       </div>
