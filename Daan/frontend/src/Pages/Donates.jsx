@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import uploadFile from "../Helper/upload";
 import axios from "axios";
+import LocationSearch from "./LocationSearch";
 import { useDispatch, useSelector } from 'react-redux';
 import { ClipLoader } from "react-spinners"; // Import the loader component
 
@@ -15,6 +16,7 @@ function Donates() {
   const [category, setCategory] = useState("");
   const [wishListed, setWishlisted] = useState(false);
   const [donated, setDonated] = useState(false);
+
   const [description, setDescription] = useState("");
   const [images, setImages] = useState([null, null, null, null, null]);
   const [image, setImage] = useState(null);
@@ -25,6 +27,11 @@ function Donates() {
 
   const [loading, setLoading] = useState(false); // Add loading state
 
+  const handleLocationChange = (newLocation) => {
+    setLocation(newLocation); // Update the state in the parent component
+    console.log('Selected Location:', newLocation);
+  };
+  
   const handleImageChange = (e, index) => {
     const file = e.target.files[0];
     if (file) {
@@ -205,15 +212,7 @@ function Donates() {
 
         <div className="border p-4 mb-4">
           <h2 className="text-xl font-semibold mb-2">Confirm Your Location</h2>
-          <div className="mb-4">
-            <label className="block mb-2">Location</label>
-            <input
-              type="text"
-              className="w-full p-2 border rounded"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-          </div>
+        <LocationSearch  onLocationChange={handleLocationChange} />
         </div>
 
         <div className="border p-4 mb-4">

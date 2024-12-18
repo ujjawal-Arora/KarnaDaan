@@ -52,7 +52,7 @@ const FrontCards = () => {
 
 
   return (
-    <div className="h-screen w-full flex flex-col mt-4 items-center bg-gray-200 p-4">
+    <div className="h-screen w-full flex -z-50 flex-col mt-4 items-center bg-gray-200 p-4">
       <div className="w-full flex flex-wrap justify-center items-center gap-10 mt-4">
         {dataSet.length > 0 ? (
           dataSet.map((card) => (

@@ -61,7 +61,7 @@ function Appbar() {
     display: 'flex',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    zIndex: 10,
+    zIndex: 1000,
     transform: showAppbar ? 'translateY(0)' : 'translateY(-100%)',
     opacity: showAppbar ? 1 : 0,
     transition: 'transform 0.9s ease-out, opacity 0.5s ease-out',
@@ -119,7 +119,7 @@ function Appbar() {
             className="p-1 px-2 pb-1 rounded-lg text-white font-bold"
           >
             {isLoggedIn ? (
-              <div className="relative z-50 inline-block text-left" ref={dropdownRef}>
+              <div className="relative inline-block text-left" ref={dropdownRef}>
                 <div className="flex items-center gap-5 cursor-pointer" onClick={toggleDropdown}>
                   <div className="rounded-full mb-4 h-8 w-8">
                     {user && (
@@ -129,7 +129,7 @@ function Appbar() {
                   <IoIosArrowDown className={`transition-transform mt-5 text-xl duration-300 ${isOpen ? 'rotate-180' : ''}`} />
                 </div>
                 {isOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-zinc-800 border border-gray-300 rounded-lg shadow-lg">
+                  <div className="absolute right-0 mt-2 z-50 w-48 bg-zinc-800 border border-gray-300 rounded-lg shadow-lg">
                     <ul className="list-none p-2 m-0">
                       <li className="hover:bg-zinc-700 p-2 border-b cursor-pointer rounded-lg" onClick={() => navigate('/your-donations')}>
                         Your Donations

@@ -9,11 +9,11 @@ function Home() {
   return (
     <div className='bg-gray-200'>
       {/* Appbar at the top */}
-      <div>
+      <div className='z-50'>
         <Appbar />
       </div>
 
-      <div className="fixed top-[64px] mt-2 w-full space-x-4 bg-gray-200 ">
+      <div className="top-[64px] mt-2 w-full space-x-4 bg-gray-200  absolute z-10">
   <button 
     className={`p-2 w-50 rounded-lg mt-2 font-semibold transition-colors border duration-300 ${selectedPage === 'FrontCards' ? 'text-orange-600 border-black' : 'bg-gray-200'}`}
     onClick={() => setSelectedPage('FrontCards')}
