@@ -117,7 +117,7 @@ function SignIn() {
         {/* <Link to="/"> */}
         <FaArrowLeft
           onClick={() => {
-            navigate("/");
+            navigate("/home");
             window.location.reload();
           }}
           className="text-2xl text-gray-600"

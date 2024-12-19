@@ -4,6 +4,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast';
+import LocationSearch from "./LocationSearch";
 import {useDispatch,useSelector } from 'react-redux';
 
 
@@ -18,10 +19,16 @@ function Requests() {
   const [location, setLocation] = useState("");
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [loading, setLoading] = useState(false); 
 
  
   const user=useSelector((state) => state.auth);
   console.log("user  at request",user.email);
+  
+  const handleLocationChange = (newLocation) => {
+    setLocation(newLocation); 
+    console.log('Selected Location:', newLocation);
+  };
   
   
   const HandleSubmit = async () => {
@@ -110,15 +117,10 @@ function Requests() {
 
         <div className="border p-4 mb-4">
           <h2 className="text-xl font-semibold mb-2">Confirm Your Location</h2>
-          <div className="mb-4">
-            <label className="block mb-2">Location</label>
-            <input
-              type="text"
-              className="w-full p-2 border rounded"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-            />
-          </div>
+          <div className="border p-4 mb-4">
+          <h2 className="text-xl font-semibold mb-2">Confirm Your Location</h2>
+        <LocationSearch  onLocationChange={handleLocationChange} />
+        </div>
         </div>
 
         <div className="border p-4 mb-4">
@@ -145,12 +147,19 @@ function Requests() {
             />
           </div>
         </div>
-        <div className="flex justify-end gap-4">
-          <button onClick={HandleSubmit} className="bg-blue-500 px-5 rounded text-white font-semibold py-2 text-xl">
-            Submit
+        <div className="flex justify-end">
+          <button
+            onClick={HandleSubmit}
+            className="bg-orange-600 text-white text-xl font-bold py-3 px-5 rounded-lg flex items-center gap-2"
+            disabled={loading} // Disable the button while loading
+          >
+            {loading ? (
+              <ClipLoader size={26} color="white" /> // Show loader
+            ) : (
+              "Submit"
+            )}
           </button>
-  
-  </div>
+        </div>
       </div>
     </div>
   );

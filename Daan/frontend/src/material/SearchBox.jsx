@@ -13,11 +13,10 @@ const SearchBox = () => {
   const autocompleteRef = useRef(null);
   const wrapperRef = useRef(null);
 
-  // Detect clicks outside and hide dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-        setPredictions([]); // Hide suggestions
+        setPredictions([]); 
       }
     };
 
@@ -85,18 +84,19 @@ const SearchBox = () => {
       console.error("Error selecting place:", error);
     }
   };
-
   const getItems = async () => {
-    const normalizedLocation = location?.toLowerCase().trim();
-    const normalizedCategory = category?.toLowerCase().trim();
-
+    const normalizedLocation = location?.toLowerCase().trim() || "";
+    const normalizedCategory = category?.toLowerCase().trim() || "";
+  
+    // Update Redux store with empty or updated values
     dispatch(
       authActions.setSearch({
-        location: normalizedLocation || "",
-        category: normalizedCategory || "",
+        location: normalizedLocation,
+        category: normalizedCategory,
       })
     );
-
+  
+    // Update local storage with empty or updated values
     localStorage.setItem(
       "search",
       JSON.stringify({
@@ -104,7 +104,7 @@ const SearchBox = () => {
         category: normalizedCategory,
       })
     );
-
+  
     console.log("Search Data:", {
       location: normalizedLocation,
       category: normalizedCategory,

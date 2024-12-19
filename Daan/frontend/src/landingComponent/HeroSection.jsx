@@ -7,11 +7,11 @@ const HeroSection = () => {
   const navigate = useNavigate(); // Initialize navigate
 
   const handleDonateClick = () => {
-    navigate('/home'); // Navigate to the /home route
+    navigate('/home'); 
   };
 
   const handleRequestClick = () => {
-    navigate('/home'); // Navigate to the /home route
+    navigate('/home', { state: { selectedPage: 'RequestCards' } });
   };
 
   return (

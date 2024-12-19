@@ -1,37 +1,68 @@
-import React, { useState } from 'react';
-import Appbar from '../Components/Appbar';
-import FrontCards from '../material/FrontCards';
-import RequestCards from '../material/RequestCards';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa"; // Import the back arrow icon
+import Appbar from "../Components/Appbar";
+import FrontCards from "../material/FrontCards";
+import RequestCards from "../material/RequestCards";
 
 function Home() {
-  const [selectedPage, setSelectedPage] = useState('FrontCards'); // Default to 'FrontCards'
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [selectedPage, setSelectedPage] = useState("FrontCards"); // Default to 'FrontCards'
+
+  // Check for state passed via navigation
+  useEffect(() => {
+    if (location.state?.selectedPage) {
+      setSelectedPage(location.state.selectedPage);
+    }
+  }, [location.state]);
 
   return (
-    <div className='bg-gray-200'>
+    <div className="bg-gray-200 min-h-screen">
       {/* Appbar at the top */}
-      <div className='z-50'>
+      <div className="z-50">
         <Appbar />
       </div>
 
-      <div className="top-[64px] mt-2 w-full space-x-4 bg-gray-200  absolute z-10">
-  <button 
-    className={`p-2 w-50 rounded-lg mt-2 font-semibold transition-colors border duration-300 ${selectedPage === 'FrontCards' ? 'text-orange-600 border-black' : 'bg-gray-200'}`}
-    onClick={() => setSelectedPage('FrontCards')}
-  >
-    Show Front Cards
-  </button>
+      {/* Navigation Buttons */}
+      <div className="fixed top-[64px] gap-2 left-0 right-0 z-10 mt-4 py-2 bg-gray-200 shadow-md flex items-center">
+        {/* Back Arrow Button */}
+        <button
+          className="px-4 py-2 mr-4 text-orange-600 hover:text-orange-800 flex items-center"
+          onClick={() => navigate("/")}
+        >
+          <FaArrowLeft className="mr-2" /> {/* Icon with spacing */}
+          Back
+        </button>
 
-  <button 
-    className={`p-2 w-50 rounded-lg font-semibold transition-colors duration-300 ${selectedPage === 'RequestCards' ? 'text-orange-600 border border-black' : 'bg-gray-200 text-black'}`}
-    onClick={() => setSelectedPage('RequestCards')}
-  >
-    Show Request Cards
-  </button>
-</div>
+        {/* Front Cards Button */}
+        <button
+          className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+            selectedPage === "FrontCards"
+              ? "bg-orange-600 text-white shadow-lg"
+              : "bg-white text-orange-600 border border-orange-600 hover:bg-orange-100"
+          }`}
+          onClick={() => setSelectedPage("FrontCards")}
+        >
+          Show Front Cards
+        </button>
+
+        {/* Request Cards Button */}
+        <button
+          className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+            selectedPage === "RequestCards"
+              ? "bg-orange-600 text-white shadow-lg"
+              : "bg-white text-orange-600 border border-orange-600 hover:bg-orange-100"
+          }`}
+          onClick={() => setSelectedPage("RequestCards")}
+        >
+          Show Request Cards
+        </button>
+      </div>
 
       {/* Scrollable container for the cards */}
-      <div className="pt-[100px]  overflow-y-auto">
-        {selectedPage === 'FrontCards' ? <FrontCards /> : <RequestCards />}
+      <div className="pt-[128px] overflow-y-auto">
+        {selectedPage === "FrontCards" ? <FrontCards /> : <RequestCards />}
       </div>
     </div>
   );
