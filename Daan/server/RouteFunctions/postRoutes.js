@@ -105,8 +105,9 @@ const deletePost = async (req, res) => {
 
   const getAllUsersNonDonatedPosts = async (req, res) => {
     try {
-      
-        const posts = await Post.find({ donated: false }).sort({ createdAt: -1 });
+      const {userId}=req.body
+      console.log(userId)
+        const posts = await Post.find({ donated: false , user:userId }).sort({ createdAt: -1 });
 
         res.status(200).json({ data: posts });
     } catch (error) {
@@ -116,8 +117,10 @@ const deletePost = async (req, res) => {
 };
 const getAllUsersDonatedPosts = async (req, res) => {
     try {
+      console.log("at right place i am ")
+      const {userId}=req.body;
       
-        const posts = await Post.find({ donated: false }).sort({ createdAt: -1 });
+        const posts = await Post.find({ donated: false , userId:userId }).sort({ createdAt: -1 });
 
         res.status(200).json({ data: posts });
     } catch (error) {
@@ -140,22 +143,31 @@ const getAllwishListedPosts = async (req, res) => {
       .json({ message: "An error occurred while fetching wishlisted posts" });
   }
 };
-
 const getAlldonatedPosts = async (req, res) => {
   try {
+    const { userId } = req.body;  
 
-    const donatedPost  = await Post.find({
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required' });  
+    }
+
+    const donatedPosts = await Post.find({
       donated: true,
+      user: userId, 
     }).sort({ createdAt: -1 }); 
+ console.log(donatedPosts)
+    if (!donatedPosts.length) {
+      return res.status(404).json({ message: 'No donated posts found for this user' });
+    }
 
-    return res.status(200).json({ data: donatedPost });
+    return res.status(200).json({ data: donatedPosts });  
   } catch (error) {
-    console.error("Error fetching wishlisted posts:", error);
-    return res
-      .status(500)
-      .json({ message: "An error occurred while fetching wishlisted posts" });
+    console.error("Error fetching donated posts:", error);  // Log error for debugging
+    return res.status(500).json({ message: "An error occurred while fetching donated posts" });  // Return error response
   }
 };
+
+
 
 
   const getAllnonWishPosts=async (req,res)=>{

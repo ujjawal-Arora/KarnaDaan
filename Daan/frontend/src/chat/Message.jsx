@@ -100,22 +100,28 @@ function Message() {
       </header>
 
       {/* Mid Part */}
-      <div className="flex-grow h-[calc(98vh-154px)] overflow-y-auto custom-scrollbar bg-slate-200 bg-opacity-50 p-4">
-        {allMessage.map((msg, index) => (
-          <div
-            key={index}
-            className={`p-1 font-sans text-lg mt-3 py-1 rounded text-black w-fit max-w-[280px] md:max-w-sm lg:max-w-md ${
-              user._id === msg?.msgByUserId ? "ml-auto bg-orange-300 " : "bg-white"
-            }`}
-          >
-            <p className="px-2">{msg.text}</p>
-            <p className="text-xs ml-auto w-fit">
-              {moment(msg.createdAt).format("hh:mm")}
-            </p>
-          </div>
-        ))}
-        <div ref={currentMessage}></div>
+    {/* Mid Part */}
+<div className="flex-grow h-[calc(98vh-154px)] overflow-y-auto custom-scrollbar bg-slate-200 bg-opacity-50 p-4">
+  {allMessage.length === 0 ? (
+    <div className="text-center text-gray-500">No messages yet</div>
+  ) : (
+    allMessage.map((msg, index) => (
+      <div
+        key={index}
+        className={`p-1 font-sans text-lg mt-3 py-1 rounded text-black w-fit max-w-[280px] md:max-w-sm lg:max-w-md ${
+          user._id === msg?.msgByUserId ? "ml-auto bg-orange-300 " : "bg-white"
+        }`}
+      >
+        <p className="px-2">{msg.text}</p>
+        <p className="text-xs ml-auto w-fit">
+          {moment(msg.createdAt).format("hh:mm")}
+        </p>
       </div>
+    ))
+  )}
+  <div ref={currentMessage}></div>
+</div>
+
 
       {/* Bottom Part */}
       <section className="sticky bottom-0 mr-1 h-[64px] bg-zinc-800 flex items-center px-4">

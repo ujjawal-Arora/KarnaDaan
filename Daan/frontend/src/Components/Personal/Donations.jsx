@@ -139,11 +139,11 @@ export default function Wishlist() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const url = view === 'donated'
-          ? 'http://localhost:3000/api/v1/posts/get-all-donated-posts'
-          : 'http://localhost:3000/api/v1/posts/get-allusers-nondonated-posts';
+        const url = 'http://localhost:3000/api/v1/posts/get-all-donated-posts';
+          
 
         const response = await axios.post(url, { userId }, { withCredentials: true });
+        console.log(data)
         setData(response.data.data);
       } catch (error) {
         console.error(error);
@@ -185,20 +185,7 @@ export default function Wishlist() {
           </h1>
         </div>
 
-        {/* <div className="flex justify-center mt-4">
-          <button
-            onClick={() => setView('donated')}
-            className="bg-blue-600 text-white p-2 rounded-lg m-2"
-          >
-            Donated Posts
-          </button>
-          <button
-            onClick={() => setView('non-donated')}
-            className="bg-gray-600 text-white p-2 rounded-lg m-2"
-          >
-            Non-Donated Posts
-          </button>
-        </div> */}
+     
 
         <div className="flex-grow overflow-y-auto p-4">
           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5 max-h-[70vh] overflow-y-scroll">

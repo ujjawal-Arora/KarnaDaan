@@ -69,7 +69,7 @@ function Sidebar() {
             onClick={() => setOpenSearchUser(true)}
             className="w-12 h-12 text-black flex justify-center items-center cursor-pointer hover:border border-gray-600 rounded mt-2"
           >
-            <FaUserPlus size={20} />
+            {/* <FaUserPlus size={20} /> */}
           </button>
         </div>
 
@@ -95,25 +95,31 @@ function Sidebar() {
         <div className="fixed top-0 left-[5vh] w-[45vh] border-r-2 border-zinc-900 shadow-l bg-zinc-800 z-20 p-4">
           <SearchBox setSearchResults={setSearchResults} data={searchdata} />
         </div>
-        <div className="mt-[4rem] mb-5 h-[calc(100vh-7rem)] w-[43vh] overflow-y-auto custom-scrollbar z-10 ml-[5vh]">
-  {(searchResults.length > 0 ? searchResults : allUsers).map((user) => {
-    const userDetails = user.userDetails || user; // Use user object directly if userDetails is not present
-    return (
-      <SearchCard
-        key={userDetails?._id || user._id}
-        avatar={userDetails?.profile_pic }
-        name={userDetails?.firstName || "Unknown User"}
-        message={user?.lastMsg?.text || ""}
-        date={
-          user?.lastMsg?.createdAt
-            ? new Date(user.lastMsg.createdAt).toLocaleDateString()
-            : ""
-        }
-        userId={userDetails?._id || user._id}
-      />
-    );
-  })}
+
+     <div className="mt-[4rem] mb-5 h-[calc(100vh-7rem)] w-[43vh] overflow-y-auto custom-scrollbar z-10 ml-[5vh]">
+  {(searchResults.length > 0 || allUsers.length > 0) ? (
+    (searchResults.length > 0 ? searchResults : allUsers).map((user) => {
+      const userDetails = user.userDetails || user; // Use user object directly if userDetails is not present
+      return (
+        <SearchCard
+          key={userDetails?._id || user._id}
+          avatar={userDetails?.profile_pic}
+          name={userDetails?.firstName || "Unknown User"}
+          message={user?.lastMsg?.text || ""}
+          date={
+            user?.lastMsg?.createdAt
+              ? new Date(user.lastMsg.createdAt).toLocaleDateString()
+              : ""
+          }
+          userId={userDetails?._id || user._id}
+        />
+      );
+    })
+  ) : (
+    <div className="text-center flex-col justify-center mt-5 text-gray-500">No conversation yet</div>
+  )}
 </div>
+
 
       </div>
 
